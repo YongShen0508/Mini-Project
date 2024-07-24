@@ -9,6 +9,12 @@
 > (only kindergarten children will run one by one) \
 > let make this bullshit processes fully automated
 
+<blockquote>
+<span style="color: red;">(only kindergarten children will run one by one)</span>
+</blockquote>
+<blockquote>
+<span style="color: blue;">let make this bullshit processes fully automated</span>
+</blockquote>
 
 ## Project II
 
