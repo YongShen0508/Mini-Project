@@ -17,6 +17,6 @@
 * then we need to run 10 times for each genetic algorithm model with benchmark function****
 * total : 4 * 4 * 4 * 4 * 10 * 10 = 25600
 
-> (only kid children will run one by one)\
+> (only kid will run one by one)\
 > is it possible to run manually for 25600 times\
 > let make this bullshit processes fully automated
