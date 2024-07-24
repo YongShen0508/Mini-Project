@@ -9,13 +9,6 @@
 > (only kindergarten children will run one by one) \
 > let make this bullshit processes fully automated
 
-<blockquote>
-<span style="color: red;">(only kindergarten children will run one by one)</span>
-</blockquote>
-<blockquote>
-<span style="color: blue;">let make this bullshit processes fully automated</span>
-</blockquote>
-
 ## Project II
 
 * Run 4 different selection operation technique, 4 mutation operation technique, 4 crossover operation technique, 4 replacement operation technique
