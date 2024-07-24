@@ -37,7 +37,6 @@ int lFvIndex = 0;
 float lFv = 0;
 int parent1, parent2;
 int iteration = 1;
-int *itPointer = &iteration;
 // string outfile1 = ".\\GAFolder\\GAResult1.txt"; // all results place in single folder
 
 //------------------------------------------------------------------------------------------------------------------------------
@@ -325,8 +324,8 @@ int main()
 					{ // Benchmark function
 
 						for (int n = 0; n < 10; n++)
-						{																				// 10 times
-							string outfile1 = ".\\GAFolder\\GAResult" + to_string(*itPointer) + ".txt"; // all results place in single folder
+						{																			   // 10 times
+							string outfile1 = ".\\GAFolder\\GAResult" + to_string(iteration) + ".txt"; // all results place in single folder
 							ofstream outfileo1(outfile1.c_str(), ios::trunc);
 							outfileo1 << "Selection OT " << (i + 1) << " \n\n";
 							outfileo1 << "Mutation OT " << (j + 1) << " \n\n";
@@ -434,7 +433,7 @@ int main()
 							// cout << "Time required for execution: " << (double)(end - start) / CLOCKS_PER_SEC << " seconds." << "\n\n";
 							outfileo1 << (double)(end - start) / CLOCKS_PER_SEC << "\n\n";
 							// getch();
-							(*itPointer)++;
+							iteration++;
 						}
 					}
 				}
