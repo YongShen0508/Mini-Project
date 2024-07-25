@@ -13,7 +13,7 @@
 
 * Run 4 different selection operation technique, 4 mutation operation technique, 4 crossover operation technique, 4 replacement operation technique
 * then every genetic algorithm model needs to test on 10 benchmark function
-* then we need to run 10 times for each genetic algorithm model with benchmark function****
+* then we need to run 10 times for each genetic algorithm model with benchmark function
 * total : 4 * 4 * 4 * 4 * 10 * 10 = 25600
 
 > (only kid will run one by one)\
