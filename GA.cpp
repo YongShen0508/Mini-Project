@@ -11,30 +11,29 @@
 #include <sstream>
 #include <cmath>
 #include <math.h>
-#define _USE_MATH_DEFINES // Define M_PI
-#define getrandom(min, max) ((rand() % (((max) + 1) - (min))) + (min))
+#define getrandom(min, max) (static_cast<long long>(rand()) * (max - min + 1) / RAND_MAX) + min
 #define gen 2000	 // number of iterations (number of generations)
 #define pSize 40	 // number of chromosomes (population size)
 #define dimension 30 // number of bits (dimension size)
 #define M_PI 3.14159265358979323846
 using namespace std;
 
-float chromosome[pSize][dimension]; // chromosome
-float paroff[4][dimension];			// parent and offspring
-float fit[pSize];					// fitness value for each chromosome
-float r = 0, dcp = 0.7, dmp = 0.01, gcp = 0, gmp = 0;
+double chromosome[pSize][dimension]; // chromosome
+double paroff[4][dimension];		 // parent and offspring
+double fit[pSize];					 // fitness value for each chromosome
+double r = 0, dcp = 0.7, dmp = 0.01, gcp = 0, gmp = 0;
 int crb = 0, mb1 = 0, mb2 = 0;
 int rp1 = 0, rp2 = 0;
-float mb1v = 0, mb2v = 0;
-float fv = 0, sumFit = 0;
-float fit1 = 0, fit2 = 0;
-float tfit[4];
+double mb1v = 0, mb2v = 0;
+double fv = 0, sumFit = 0;
+double fit1 = 0, fit2 = 0;
+double tfit[4];
 // int rangeMin = 5120, rangeMax = 5120, rangeDiv = 1000;
-int rangeMin[10] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
-int rangeMax[10] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
-int rangeDiv[10] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+int rangeMin[10] = {5120, 32768, 5120, 5000, 5120, 600000, 1000, 65536, 5000, 1000};
+int rangeMax[10] = {5120, 32768, 5120, 5000, 5120, 600000, 1000, 655326, 5000, 1000};
+int rangeDiv[10] = {1000, 1000, 1000, 1000, 1000, 600000, 1000, 1000, 1000, 1000};
 int lFvIndex = 0;
-float lFv = 0;
+double lFv = 0;
 int parent1, parent2;
 int iteration = 1;
 // string outfile1 = ".\\GAFolder\\GAResult1.txt"; // all results place in single folder
@@ -45,9 +44,9 @@ int iteration = 1;
 //------------------------------------------------------------------------------------------------------------------------------
 // Fitness Function
 //------------------------------------------------------------------------------------------------------------------------------
-float Fitness(float a[], int b)
+double Fitness(double a[], int b)
 {
-	float sum1, sum2, sum3, product, term1, term2;
+	double sum1, sum2, sum3, product, term1, term2;
 
 	//---------------------------------------------------------------------------------------------------------------------------
 	// Insert Benchmark Functions
@@ -60,7 +59,6 @@ float Fitness(float a[], int b)
 			fv = pow(a[j], 2);
 			sumFit = sumFit + fv;
 		}
-		sumFit = -exp(-0.5 * sumFit);
 		break;
 	case (1): // benchmark function 2 (Ackley function)
 		sum1 = 0.0;
@@ -167,10 +165,9 @@ void GeneratePopulation(int b)
 			chromosome[i][j] = r;
 		}
 		// cout<<"Chromosome "<<i+1<<endl;
-		for (int j = 0; j < dimension; j++)
-		{
-			// cout << setprecision(6) << chromosome[i][j] << "\t";
-		}
+		// for (int j = 0; j < dimension; j++){
+		// cout << setprecision(6) << chromosome[i][j] << "\t";
+		//}
 		// cout << endl<< endl;
 	}
 }
@@ -304,9 +301,12 @@ void ReplacementOperationTechnique(int l)
 		fit[parent1] = tfit[rp1];
 		fit[parent2] = tfit[rp2];
 		break;
+
+	default:
+		cout << "Replacement errors" << endl;
+		break;
 	}
 }
-
 int main()
 {
 	clock_t start, end;
@@ -314,9 +314,9 @@ int main()
 	for (int i = 0; i < 1; i++)
 	{ // Selection operation technique (i)
 		for (int j = 0; j < 1; j++)
-		{ // Mutation operation technique(j)
+		{ // CrossOver operation technique(k)
 			for (int k = 0; k < 1; k++)
-			{ // CrossOver operation technique(k)
+			{ // Mutation operation technique(j)
 				for (int l = 0; l < 1; l++)
 				{ // Replacement operation technique(l)
 
@@ -328,17 +328,17 @@ int main()
 							string outfile1 = ".\\GAFolder\\GAResult" + to_string(iteration) + ".txt"; // all results place in single folder
 							ofstream outfileo1(outfile1.c_str(), ios::trunc);
 							outfileo1 << "Selection OT " << (i + 1) << " \n\n";
-							outfileo1 << "Mutation OT " << (j + 1) << " \n\n";
-							outfileo1 << "Crossover OT " << (k + 1) << " \n\n";
+							outfileo1 << "Crossover OT " << (j + 1) << " \n\n";
+							outfileo1 << "Mutation OT " << (k + 1) << " \n\n";
 							outfileo1 << "Replacement OT " << (l + 1) << " \n\n";
 							outfileo1 << "Benchmark Funtion " << (b + 1) << " \n\n";
 							outfileo1 << "Times " << (n + 1) << " \n\n";
-							cout << "Selection OT " << (i + 1) << " \n\n";
-							cout << "Mutation OT " << (j + 1) << " \n\n";
-							cout << "Crossover OT " << (k + 1) << " \n\n";
-							cout << "Replacement OT " << (l + 1) << " \n\n";
-							cout << "Benchmark Funtion " << (b + 1) << " \n\n";
-							cout << "Times " << (n + 1) << " \n\n";
+							// cout << "Selection OT " << (i + 1) << " \n\n";
+							// cout << "Mutation OT " << (j + 1) << " \n\n";
+							// cout << "Crossover OT " << (k + 1) << " \n\n";
+							// cout << "Replacement OT " << (l + 1) << " \n\n";
+							// cout << "Benchmark Funtion " << (b + 1) << " \n\n";
+							// cout << "Times " << (n + 1) << " \n\n";
 
 							// CPU Time
 							start = clock();
@@ -363,14 +363,16 @@ int main()
 								// Selection operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
 								SelectionOperationTechnique(i);
-								//--------------------------------------------------------------------------------------------------------------------------
-								// Mutation operation technique function calling
-								//--------------------------------------------------------------------------------------------------------------------------
-								MutationOperationTechnique(j);
+
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Crossover operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-								CrossoverOperationTechnique(k);
+								CrossoverOperationTechnique(j);
+
+								//--------------------------------------------------------------------------------------------------------------------------
+								// Mutation operation technique function calling
+								//--------------------------------------------------------------------------------------------------------------------------
+								MutationOperationTechnique(k);
 
 								//------------------------------------------------------------------------------------------------------------------------
 								// Fitness Evaluation
@@ -432,7 +434,7 @@ int main()
 							end = clock();
 							// cout << "Time required for execution: " << (double)(end - start) / CLOCKS_PER_SEC << " seconds." << "\n\n";
 							outfileo1 << (double)(end - start) / CLOCKS_PER_SEC << "\n\n";
-							// getch();
+							getch();
 							iteration++;
 						}
 					}
