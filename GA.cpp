@@ -284,14 +284,21 @@ void ReplacementOperationTechnique(int l)
 	case (0): // weak parent replacement
 		for (int i = 0; i < 2; i++)
 		{
-			if (tfit[i] < tfit[i + 2]) // parent i < offspring i + 2
-			{
-				int parentIndex = (i == 0) ? parent1 : parent2;
-				for (int k = 0; k < dimension; k++)
-				{
-					chromosome[parentIndex][k] = paroff[i + 2][k];
+			for(int j=2;j<4;j++){
+				if(i == 0 && tfit[i] < tfit[j]){
+					tfit[i] = tfit[j];
+					for(int k=0;k<dimension;k++){
+						paroff[parent1][k] = paroff[j][k];
+					}
+					fit[parent1] = tfit[j];
 				}
-				fit[parent2] = tfit[i + 2];
+				else if(i == 1 && tfit[i] < tfit[j]){
+					tfit[i] = tfit[j];
+					for(int k=0;k<dimension;k++){
+						paroff[parent2][k] = paroff[j][k];
+					}
+					fit[parent2] = tfit[j];
+				}
 			}
 		}
 		break;
