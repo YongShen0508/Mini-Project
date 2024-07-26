@@ -286,25 +286,14 @@ void ReplacementOperationTechnique(int l)
 		{
 			if (tfit[i] < tfit[i + 2]) // parent i < offspring i + 2
 			{
-				if (i == 0)
+				int parentIndex = (i == 0) ? parent1 : parent2;
+				for (int k = 0; k < dimension; k++)
 				{
-					for (int k = 0; k < dimension; k++)
-					{
-						chromosome[parent1][k] = paroff[i + 2][k];
-					}
-					fit[parent1] = tfit[i + 2];
+					chromosome[parentIndex][k] = paroff[i + 2][k];
 				}
-				else
-				{
-					for (int k = 0; k < dimension; k++)
-					{
-						chromosome[parent2][k] = paroff[i + 2][k];
-					}
-					fit[parent2] = tfit[i + 2];
-				}
+				fit[parent2] = tfit[i + 2];
 			}
 		}
-
 		break;
 	case (1): // both parent replacement
 		for (int i = 0; i < dimension; i++)
@@ -337,7 +326,7 @@ int main()
 					{ // Benchmark function
 
 						for (int n = 0; n < 10; n++)
-						{																			   // 10 times
+						{// 10 times
 							string outfile1 = ".\\GAFolder\\GAResult" + to_string(iteration) + ".txt"; // all results place in single folder
 							ofstream outfileo1(outfile1.c_str(), ios::trunc);
 							outfileo1 << "Selection OT " << (i + 1) << " \n\n";
