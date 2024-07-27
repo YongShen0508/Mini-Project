@@ -202,37 +202,6 @@ void SelectionOperationTechnique(int i)
 		}
 		break;
 
-	case(1): //Selection Operation (Roulette Selection)
-		int parent1 = rand() % pSize;
-	        double bestFitness1 = fit[parent1];
-	        for (int t = 1; t < tournamentSize; t++) {
-	            int competitorIndex = rand() % pSize;
-	            if (fit[competitorIndex] < bestFitness1) {
-	                parent1 = competitorIndex;
-	                bestFitness1 = fit[competitorIndex];
-	            }
-	        }
-	        int parent2;
-	        do {
-	            parent2 = rand() % pSize;
-	            double bestFitness2 = fit[parent2];
-	            for (int t = 1; t < tournamentSize; t++) {
-	                int competitorIndex = rand() % pSize;
-	                if (fit[competitorIndex] < bestFitness2) {
-	                    parent2 = competitorIndex;
-	                    bestFitness2 = fit[competitorIndex];
-	                }
-	            }
-	        } while (parent2 == parent1);
-	 
-	        // Copy the selected parents' chromosomes
-	        for (int j = 0; j < dimension; j++)
-	        {
-	            paroff[0][j] = chromosome[parent1][j];
-	            paroff[1][j] = chromosome[parent2][j];
-	        }
-		break;
-
 	default:
 		cout << "Selection errors" << endl;
 		break;
