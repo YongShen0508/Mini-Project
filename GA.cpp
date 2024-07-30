@@ -209,39 +209,43 @@ void SelectionOperationTechnique(int i)
 }
 void MutationOperationTechnique(int j)
 {
-	switch (j)
-	{
-	case (0):
-		gcp = (rand() % 1000);
-		gcp = gcp / 1000;
-		crb = getrandom(1, dimension - 2);
-		if (gcp <= dcp)
-		{
-			for (int j = 0; j < crb; j++)
-			{
-				paroff[2][j] = paroff[0][j];
-				paroff[3][j] = paroff[1][j];
-			}
-			for (int j = crb; j < dimension; j++)
-			{
-				paroff[2][j] = paroff[1][j];
-				paroff[3][j] = paroff[0][j];
-			}
-		}
-		else
-		{
-			for (int j = 0; j < dimension; j++)
-			{
-				paroff[2][j] = paroff[0][j];
-				paroff[3][j] = paroff[1][j];
-			}
-		}
-		break;
+    switch (j)
+    {
+    case (0): // Flipping Mutation
+        for (int i = 2; i < 4; i++) 
+        {
+            for (int k = 0; k < dimension; k++)
+            {
+                gmp = (rand() % 1000000) / 1000000; 
+                if (gmp <= dmp)
+                {
+                    // Flip the gene (invert its sign)
+                    paroff[i][k] = -paroff[i][k];
+                }
+            }
+        }
+        break;
+        
+    case (1): // Uniform Mutation
+        for (int i = 2; i < 4; i++) 
+        {
+            for (int k = 0; k < dimension; k++)
+            {
+                gmp = (rand() % 1000000) / 1000000; 
+                if (gmp <= dmp)
+                {
+                    // Uniform mutation: replace the gene with a random value within the allowed range
+                    double newValue = getrandom(-rangeMin[j], rangeMax[j]) / rangeDiv[j];
+                    paroff[i][k] = newValue;
+                }
+            }
+        }
+        break;
 
-	default:
-		cout << "Mutation errors" << endl;
-		break;
-	}
+    default:
+        cout << "Mutation errors" << endl;
+        break;
+    }
 }
 void CrossoverOperationTechnique(int k)
 {
