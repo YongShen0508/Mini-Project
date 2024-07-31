@@ -183,30 +183,85 @@ void FitnessValue(int b)
 
 void SelectionOperationTechnique(int i)
 {
-	switch (i)
-	{
-	case (0):
-		parent1 = rand() % pSize; // parent 1
-	redo:						  // mark a point
-		parent2 = rand() % pSize; // parent 2
-		if (parent2 == parent1)
-		{			   // if both same
-			goto redo; // redo again (back to redo)
-		}
-		tfit[0] = fit[parent1];
-		tfit[1] = fit[parent2];
-		for (int j = 0; j < dimension; j++)
-		{
-			paroff[0][j] = chromosome[parent1][j]; // store selected chromosome into paroff
-			paroff[1][j] = chromosome[parent2][j];
-		}
-		break;
+    switch (i)
+    {
+    case (0): // Roulette Wheel Selection
+        {
+            double totalFitness = 0;
+            for (int j = 0; j < pSize; j++) {
+                totalFitness += fit[j];
+            }
 
-	default:
-		cout << "Selection errors" << endl;
-		break;
-	}
+            // Select parent1
+            double random1 = ((double)rand() / RAND_MAX) * totalFitness;
+            double partialSum = 0;
+            for (parent1 = 0; parent1 < pSize; parent1++) {
+                partialSum += fit[parent1];
+                if (partialSum >= random1) break;
+            }
+
+            // Select parent2
+            double random2;
+            do {
+                random2 = ((double)rand() / RAND_MAX) * totalFitness;
+                partialSum = 0;
+                for (parent2 = 0; parent2 < pSize; parent2++) {
+                    partialSum += fit[parent2];
+                    if (partialSum >= random2) break;
+                }
+            } while (parent2 == parent1);
+
+            tfit[0] = fit[parent1];
+            tfit[1] = fit[parent2];
+            for (int j = 0; j < dimension; j++)
+            {
+                paroff[0][j] = chromosome[parent1][j];
+                paroff[1][j] = chromosome[parent2][j];
+            }
+        }
+        break;
+
+    case (1): // Tournament Selection
+        {
+            int tournamentSize = 5; 
+
+            // Select parent1
+            parent1 = rand() % pSize;
+            for (int j = 1; j < tournamentSize; j++) {
+                int competitor = rand() % pSize;
+                if (fit[competitor] < fit[parent1]) { 
+                    parent1 = competitor;
+                }
+            }
+
+            // Select parent2
+            do {
+                parent2 = rand() % pSize;
+                for (int j = 1; j < tournamentSize; j++) {
+                    int competitor = rand() % pSize;
+                    if (fit[competitor] < fit[parent2]) { 
+                        parent2 = competitor;
+                    }
+                }
+            } while (parent2 == parent1);
+
+            tfit[0] = fit[parent1];
+            tfit[1] = fit[parent2];
+            for (int j = 0; j < dimension; j++)
+            {
+                paroff[0][j] = chromosome[parent1][j];
+                paroff[1][j] = chromosome[parent2][j];
+            }
+        }
+        break;
+
+    default:
+        cout << "Selection errors" << endl;
+        break;
+    }
 }
+
+
 void MutationOperationTechnique(int j)
 {
     switch (j)
