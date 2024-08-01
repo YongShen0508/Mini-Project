@@ -304,11 +304,13 @@ void MutationOperationTechnique(int j)
 }
 void CrossoverOperationTechnique(int k)
 {
-	switch (k)
-	{
-	 case (0): // Uniform Crossover
-         for (int i = 0; i < dimension; ++i)
-         {
+    switch (k)
+    {
+    
+    case 0: // Uniform Crossover
+    {
+        for (int i = 0; i < dimension; ++i)
+        {
             if ((rand() % 2) == 0)
             {
                 paroff[2][i] = paroff[0][i];
@@ -319,18 +321,19 @@ void CrossoverOperationTechnique(int k)
                 paroff[2][i] = paroff[1][i];
                 paroff[3][i] = paroff[0][i];
             }
-         }
-         break;
-
-         case (1): // Two-Point Crossover
-         int point1 = getrandom(0, dimension - 1);
-         int point2 = getrandom(0, dimension - 1);
-         if (point1 > point2)
-         {
+        }
+        break;
+    }
+    case 1: // Two-Point Crossover
+    {
+        int point1 = getrandom(0, dimension - 1);
+        int point2 = getrandom(0, dimension - 1);
+        if (point1 > point2)
+        {
             std::swap(point1, point2);
-         }
-         for (int i = 0; i < dimension; ++i)
-         {
+        }
+        for (int i = 0; i < dimension; ++i)
+        {
             if (i >= point1 && i <= point2)
             {
                 paroff[2][i] = paroff[1][i];
@@ -341,12 +344,13 @@ void CrossoverOperationTechnique(int k)
                 paroff[2][i] = paroff[0][i];
                 paroff[3][i] = paroff[1][i];
             }
-         }
-         break;
-	 default:
-		cout << "Crossover errors" << endl;
-		break;
-	}
+        }
+        break;
+    }
+    default:
+        cout << "Crossover operation technique error: invalid case" << endl;
+        break;
+    }
 }
 void ReplacementOperationTechnique(int l)
 {
