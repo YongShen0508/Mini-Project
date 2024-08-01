@@ -306,32 +306,44 @@ void CrossoverOperationTechnique(int k)
 {
 	switch (k)
 	{
-	case (0):
-		gmp = (rand() % 1000000);
-		gmp = gmp / 1000000;
-		mb1 = getrandom(0, dimension - 1);
+	 case (0): // Uniform Crossover
+         for (int i = 0; i < dimension; ++i)
+         {
+            if ((rand() % 2) == 0)
+            {
+                paroff[2][i] = paroff[0][i];
+                paroff[3][i] = paroff[1][i];
+            }
+            else
+            {
+                paroff[2][i] = paroff[1][i];
+                paroff[3][i] = paroff[0][i];
+            }
+         }
+         break;
 
-	redo2:
-		mb2 = getrandom(0, dimension - 1);
-
-		if (mb2 == mb1)
-		{
-			goto redo2;
-		}
-
-		if (gmp <= dmp)
-		{
-			mb1v = paroff[2][mb1];
-			mb2v = paroff[2][mb2];
-			paroff[2][mb1] = mb2v;
-			paroff[2][mb2] = mb1v;
-			mb1v = paroff[3][mb1];
-			mb2v = paroff[3][mb2];
-			paroff[3][mb1] = mb2v;
-			paroff[3][mb2] = mb1v;
-		}
-		break;
-	default:
+         case (1): // Two-Point Crossover
+         int point1 = getrandom(0, dimension - 1);
+         int point2 = getrandom(0, dimension - 1);
+         if (point1 > point2)
+         {
+            std::swap(point1, point2);
+         }
+         for (int i = 0; i < dimension; ++i)
+         {
+            if (i >= point1 && i <= point2)
+            {
+                paroff[2][i] = paroff[1][i];
+                paroff[3][i] = paroff[0][i];
+            }
+            else
+            {
+                paroff[2][i] = paroff[0][i];
+                paroff[3][i] = paroff[1][i];
+            }
+         }
+         break;
+	 default:
 		cout << "Crossover errors" << endl;
 		break;
 	}
