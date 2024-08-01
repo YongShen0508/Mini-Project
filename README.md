@@ -19,3 +19,7 @@
 > (only kid will run one by one)\
 > is it possible to run manually for 25600 times\
 > let make this bullshit processes fully automated
+
+
+
+HOW TO RUN PYTHON AUTOFILL FILE
