@@ -183,207 +183,189 @@ void FitnessValue(int b)
 
 void SelectionOperationTechnique(int i)
 {
-	switch (i)
-	{
-	case (0): // Roulette Wheel Selection
-	{
-		double totalFitness = 0;
-		for (int j = 0; j < pSize; j++)
-		{
-			totalFitness += fit[j];
-		}
+    switch (i)
+    {
+    case (0): // Roulette Wheel Selection
+        {
+            double totalFitness = 0;
+            for (int j = 0; j < pSize; j++) {
+                totalFitness += fit[j];
+            }
 
-		// Select parent1
-		double random1 = ((double)rand() / RAND_MAX) * totalFitness;
-		double partialSum = 0;
-		for (parent1 = 0; parent1 < pSize; parent1++)
-		{
-			partialSum += fit[parent1];
-			if (partialSum >= random1)
-				break;
-		}
+            // Select parent1
+            double random1 = ((double)rand() / RAND_MAX) * totalFitness;
+            double partialSum = 0;
+            for (parent1 = 0; parent1 < pSize; parent1++) {
+                partialSum += fit[parent1];
+                if (partialSum >= random1) break;
+            }
 
-		// Select parent2
-		double random2;
-		do
-		{
-			random2 = ((double)rand() / RAND_MAX) * totalFitness;
-			partialSum = 0;
-			for (parent2 = 0; parent2 < pSize; parent2++)
-			{
-				partialSum += fit[parent2];
-				if (partialSum >= random2)
-					break;
-			}
-		} while (parent2 == parent1);
+            // Select parent2
+            double random2;
+            do {
+                random2 = ((double)rand() / RAND_MAX) * totalFitness;
+                partialSum = 0;
+                for (parent2 = 0; parent2 < pSize; parent2++) {
+                    partialSum += fit[parent2];
+                    if (partialSum >= random2) break;
+                }
+            } while (parent2 == parent1);
 
-		tfit[0] = fit[parent1];
-		tfit[1] = fit[parent2];
-		for (int j = 0; j < dimension; j++)
-		{
-			paroff[0][j] = chromosome[parent1][j];
-			paroff[1][j] = chromosome[parent2][j];
-		}
-	}
-	break;
+            tfit[0] = fit[parent1];
+            tfit[1] = fit[parent2];
+            for (int j = 0; j < dimension; j++)
+            {
+                paroff[0][j] = chromosome[parent1][j];
+                paroff[1][j] = chromosome[parent2][j];
+            }
+        }
+        break;
 
-	case (1): // Tournament Selection
-	{
-		int tournamentSize = 5;
+    case (1): // Tournament Selection
+        {
+            int tournamentSize = 5; 
 
-		// Select parent1
-		parent1 = rand() % pSize;
-		for (int j = 1; j < tournamentSize; j++)
-		{
-			int competitor = rand() % pSize;
-			if (fit[competitor] < fit[parent1])
-			{
-				parent1 = competitor;
-			}
-		}
+            // Select parent1
+            parent1 = rand() % pSize;
+            for (int j = 1; j < tournamentSize; j++) {
+                int competitor = rand() % pSize;
+                if (fit[competitor] < fit[parent1]) { 
+                    parent1 = competitor;
+                }
+            }
 
-		// Select parent2
-		do
-		{
-			parent2 = rand() % pSize;
-			for (int j = 1; j < tournamentSize; j++)
-			{
-				int competitor = rand() % pSize;
-				if (fit[competitor] < fit[parent2])
-				{
-					parent2 = competitor;
-				}
-			}
-		} while (parent2 == parent1);
+            // Select parent2
+            do {
+                parent2 = rand() % pSize;
+                for (int j = 1; j < tournamentSize; j++) {
+                    int competitor = rand() % pSize;
+                    if (fit[competitor] < fit[parent2]) { 
+                        parent2 = competitor;
+                    }
+                }
+            } while (parent2 == parent1);
 
-		tfit[0] = fit[parent1];
-		tfit[1] = fit[parent2];
-		for (int j = 0; j < dimension; j++)
-		{
-			paroff[0][j] = chromosome[parent1][j];
-			paroff[1][j] = chromosome[parent2][j];
-		}
-	}
-	break;
+            tfit[0] = fit[parent1];
+            tfit[1] = fit[parent2];
+            for (int j = 0; j < dimension; j++)
+            {
+                paroff[0][j] = chromosome[parent1][j];
+                paroff[1][j] = chromosome[parent2][j];
+            }
+        }
+        break;
 
-	default:
-		cout << "Selection errors" << endl;
-		break;
-	}
+    default:
+        cout << "Selection errors" << endl;
+        break;
+    }
 }
 
-void MutationOperationTechnique(int j)
+
+void MutationOperationTechnique(int j, int b)
 {
-	switch (j)
-	{
-	case (0): // Flipping Mutation
-	{
-		for (int i = 2; i < 4; i++)
-		{
-			for (int k = 0; k < dimension; k++)
-			{
-				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
-				{
-					// Flip the gene (invert its sign)
-					paroff[i][k] = -paroff[i][k];
-				}
-			}
-		}
-		break;
-	}
-		
-	case (1): // Uniform Mutation
-	{
-		for (int i = 2; i < 4; i++)
-		{
-			for (int k = 0; k < dimension; k++)
-			{
-				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
-				{
-					// Uniform mutation: replace the gene with a random value within the allowed range
-					double newValue = getrandom(-rangeMin[j], rangeMax[j]) / rangeDiv[j];
-					paroff[i][k] = newValue;
-				}
-			}
-		}
-		break;
-	}
-		
-	default:
-		cout << "Mutation errors" << endl;
-		break;
-	}
+    switch (j)
+    {
+    case (0): // Flipping Mutation
+        for (int i = 2; i < 4; i++) 
+        {
+            for (int k = 0; k < dimension; k++)
+            {
+                gmp = (rand() % 1000000) / 1000000; 
+                if (gmp <= dmp)
+                {
+                    // Flip the gene (invert its sign)
+                    paroff[i][k] = -paroff[i][k];
+                }
+            }
+        }
+        break;
+        
+    case (1): // Uniform Mutation
+        for (int i = 2; i < 4; i++) 
+        {
+            for (int k = 0; k < dimension; k++)
+            {
+                gmp = (rand() % 1000000) / 1000000; 
+                if (gmp <= dmp)
+                {
+                    // Uniform mutation: replace the gene with a random value within the allowed range
+                    double newValue = getrandom(-rangeMin[b], rangeMax[b]) / rangeDiv[b];
+                    paroff[i][k] = newValue;
+                }
+            }
+        }
+        break;
+
+    default:
+        cout << "Mutation errors" << endl;
+        break;
+    }
 }
 void CrossoverOperationTechnique(int k)
 {
-	switch (k)
-	{
-	case (0): // Uniform Crossover
-	{
-		for (int i = 0; i < dimension; ++i)
-		{
-			if ((rand() % 2) == 0)
-			{
-				paroff[2][i] = paroff[0][i];
-				paroff[3][i] = paroff[1][i];
-			}
-			else
-			{
-				paroff[2][i] = paroff[1][i];
-				paroff[3][i] = paroff[0][i];
-			}
-		}
-		break;
-	}
-	case (1): // Two-Point Crossover
-	{
-		int point1 = getrandom(0, dimension - 1);
-		int point2 = getrandom(0, dimension - 1);
-		if (point1 > point2)
-		{
-			std::swap(point1, point2);
-		}
-		for (int i = 0; i < dimension; ++i)
-		{
-			if (i >= point1 && i <= point2)
-			{
-				paroff[2][i] = paroff[1][i];
-				paroff[3][i] = paroff[0][i];
-			}
-			else
-			{
-				paroff[2][i] = paroff[0][i];
-				paroff[3][i] = paroff[1][i];
-			}
-		}
-		break;
-	}
-	default:
-		cout << "Crossover errors" << endl;
-		break;
-	}
+    switch (k)
+    {
+    
+    case 0: // Uniform Crossover
+    {
+        for (int i = 0; i < dimension; ++i)
+        {
+            if ((rand() % 2) == 0)
+            {
+                paroff[2][i] = paroff[0][i];
+                paroff[3][i] = paroff[1][i];
+            }
+            else
+            {
+                paroff[2][i] = paroff[1][i];
+                paroff[3][i] = paroff[0][i];
+            }
+        }
+        break;
+    }
+    case 1: // Two-Point Crossover
+    {
+        int point1 = getrandom(0, dimension - 1);
+        int point2 = getrandom(0, dimension - 1);
+        if (point1 > point2)
+        {
+            std::swap(point1, point2);
+        }
+        for (int i = 0; i < dimension; ++i)
+        {
+            if (i >= point1 && i <= point2)
+            {
+                paroff[2][i] = paroff[1][i];
+                paroff[3][i] = paroff[0][i];
+            }
+            else
+            {
+                paroff[2][i] = paroff[0][i];
+                paroff[3][i] = paroff[1][i];
+            }
+        }
+        break;
+    }
+    default:
+        cout << "Crossover operation technique error: invalid case" << endl;
+        break;
+    }
 }
 void ReplacementOperationTechnique(int l)
 {
 	switch (l)
 	{
 	case (0): // weak parent replacement
-		for (int j = 2; j < 4; j++)
-		{
-			if (tfit[0] < tfit[j])
-			{
-				for (int k = 0; k < dimension; k++)
-				{
+		for(int j=2;j<4;j++){
+			if(tfit[0] < tfit[j]){
+				for(int k=0;k<dimension;k++){
 					chromosome[parent1][k] = paroff[j][k];
 				}
 				fit[parent1] = tfit[j];
 			}
-			if (tfit[1] < tfit[j])
-			{
-				for (int k = 0; k < dimension; k++)
-				{
+			if(tfit[1] < tfit[j]){
+				for(int k=0;k<dimension;k++){
 					chromosome[parent2][k] = paroff[j][k];
 				}
 				fit[parent2] = tfit[j];
@@ -407,40 +389,39 @@ void ReplacementOperationTechnique(int l)
 int main()
 {
 	clock_t start, end;
-	srand(time(0));
 	// Each operation technique will run ten benchmark (each benchmark 10 times)
-	for (int e = 0; e < 1; e++)
+	for (int i = 0; i < 1; i++)
 	{ // Selection operation technique (i)
-		for (int f = 0; f < 1; f++)
+		for (int j = 0; j < 1; j++)
 		{ // CrossOver operation technique(k)
-			for (int g = 0; g < 1; g++)
+			for (int k = 0; k < 1; k++)
 			{ // Mutation operation technique(j)
-				for (int h = 0; h < 1; h++)
+				for (int l = 0; l < 1; l++)
 				{ // Replacement operation technique(l)
 
 					for (int b = 0; b < 10; b++)
 					{ // Benchmark function
 
 						for (int n = 0; n < 10; n++)
-						{																			   // 10 times
+						{// 10 times
 							string outfile1 = ".\\GAFolder\\GAResult" + to_string(iteration) + ".txt"; // all results place in single folder
 							ofstream outfileo1(outfile1.c_str(), ios::trunc);
-							// outfileo1 << "Selection OT " << (i + 1) << " \n\n";
-							// outfileo1 << "Crossover OT " << (j + 1) << " \n\n";
-							// outfileo1 << "Mutation OT " << (k + 1) << " \n\n";
-							// outfileo1 << "Replacement OT " << (l + 1) << " \n\n";
-							// outfileo1 << "Benchmark Funtion " << (b + 1) << " \n\n";
-							// outfileo1 << "Times " << (n + 1) << " \n\n";
-							//  cout << "Selection OT " << (i + 1) << " \n\n";
-							//  cout << "Mutation OT " << (j + 1) << " \n\n";
-							//  cout << "Crossover OT " << (k + 1) << " \n\n";
-							//  cout << "Replacement OT " << (l + 1) << " \n\n";
-							//  cout << "Benchmark Funtion " << (b + 1) << " \n\n";
-							//  cout << "Times " << (n + 1) << " \n\n";
+							//outfileo1 << "Selection OT " << (i + 1) << " \n\n";
+							//outfileo1 << "Crossover OT " << (j + 1) << " \n\n";
+							//outfileo1 << "Mutation OT " << (k + 1) << " \n\n";
+							//outfileo1 << "Replacement OT " << (l + 1) << " \n\n";
+							//outfileo1 << "Benchmark Funtion " << (b + 1) << " \n\n";
+							//outfileo1 << "Times " << (n + 1) << " \n\n";
+							// cout << "Selection OT " << (i + 1) << " \n\n";
+							// cout << "Mutation OT " << (j + 1) << " \n\n";
+							// cout << "Crossover OT " << (k + 1) << " \n\n";
+							// cout << "Replacement OT " << (l + 1) << " \n\n";
+							// cout << "Benchmark Funtion " << (b + 1) << " \n\n";
+							// cout << "Times " << (n + 1) << " \n\n";
 
 							// CPU Time
 							start = clock();
-							//srand(time(0));
+							srand(time(0));
 							//---------------------------------------------------------------------------------------------------------------------------
 							// Generate Population
 							//---------------------------------------------------------------------------------------------------------------------------
@@ -460,17 +441,17 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Selection operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-								SelectionOperationTechnique(e);
+								SelectionOperationTechnique(i);
 
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Crossover operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-								CrossoverOperationTechnique(f);
+								CrossoverOperationTechnique(j);
 
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Mutation operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-								MutationOperationTechnique(g);
+								MutationOperationTechnique(k,b);
 
 								//------------------------------------------------------------------------------------------------------------------------
 								// Fitness Evaluation
@@ -488,7 +469,7 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Replacement operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-								ReplacementOperationTechnique(h);
+								ReplacementOperationTechnique(l);
 
 								lFv = pow(999, 30);
 								for (int j = 0; j < pSize; j++)
