@@ -262,7 +262,7 @@ void SelectionOperationTechnique(int i)
 }
 
 
-void MutationOperationTechnique(int j)
+void MutationOperationTechnique(int j, int b)
 {
     switch (j)
     {
@@ -290,7 +290,7 @@ void MutationOperationTechnique(int j)
                 if (gmp <= dmp)
                 {
                     // Uniform mutation: replace the gene with a random value within the allowed range
-                    double newValue = getrandom(-rangeMin[j], rangeMax[j]) / rangeDiv[j];
+                    double newValue = getrandom(-rangeMin[b], rangeMax[b]) / rangeDiv[b];
                     paroff[i][k] = newValue;
                 }
             }
@@ -451,7 +451,7 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Mutation operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-								MutationOperationTechnique(k);
+								MutationOperationTechnique(k,b);
 
 								//------------------------------------------------------------------------------------------------------------------------
 								// Fitness Evaluation
