@@ -341,23 +341,18 @@ void ReplacementOperationTechnique(int l)
 	switch (l)
 	{
 	case (0): // weak parent replacement
-		for (int i = 0; i < 2; i++)
-		{
-			for(int j=2;j<4;j++){
-				if(i == 0 && tfit[i] < tfit[j]){
-					tfit[i] = tfit[j];
-					for(int k=0;k<dimension;k++){
-						paroff[parent1][k] = paroff[j][k];
-					}
-					fit[parent1] = tfit[j];
+		for(int j=2;j<4;j++){
+			if(tfit[0] < tfit[j]){
+				for(int k=0;k<dimension;k++){
+					chromosome[parent1][k] = paroff[j][k];
 				}
-				else if(i == 1 && tfit[i] < tfit[j]){
-					tfit[i] = tfit[j];
-					for(int k=0;k<dimension;k++){
-						paroff[parent2][k] = paroff[j][k];
-					}
-					fit[parent2] = tfit[j];
+				fit[parent1] = tfit[j];
+			}
+			if(tfit[1] < tfit[j]){
+				for(int k=0;k<dimension;k++){
+					chromosome[parent2][k] = paroff[j][k];
 				}
+				fit[parent2] = tfit[j];
 			}
 		}
 		break;
@@ -395,12 +390,12 @@ int main()
 						{// 10 times
 							string outfile1 = ".\\GAFolder\\GAResult" + to_string(iteration) + ".txt"; // all results place in single folder
 							ofstream outfileo1(outfile1.c_str(), ios::trunc);
-							outfileo1 << "Selection OT " << (i + 1) << " \n\n";
-							outfileo1 << "Crossover OT " << (j + 1) << " \n\n";
-							outfileo1 << "Mutation OT " << (k + 1) << " \n\n";
-							outfileo1 << "Replacement OT " << (l + 1) << " \n\n";
-							outfileo1 << "Benchmark Funtion " << (b + 1) << " \n\n";
-							outfileo1 << "Times " << (n + 1) << " \n\n";
+							//outfileo1 << "Selection OT " << (i + 1) << " \n\n";
+							//outfileo1 << "Crossover OT " << (j + 1) << " \n\n";
+							//outfileo1 << "Mutation OT " << (k + 1) << " \n\n";
+							//outfileo1 << "Replacement OT " << (l + 1) << " \n\n";
+							//outfileo1 << "Benchmark Funtion " << (b + 1) << " \n\n";
+							//outfileo1 << "Times " << (n + 1) << " \n\n";
 							// cout << "Selection OT " << (i + 1) << " \n\n";
 							// cout << "Mutation OT " << (j + 1) << " \n\n";
 							// cout << "Crossover OT " << (k + 1) << " \n\n";
@@ -502,7 +497,6 @@ int main()
 							end = clock();
 							// cout << "Time required for execution: " << (double)(end - start) / CLOCKS_PER_SEC << " seconds." << "\n\n";
 							outfileo1 << (double)(end - start) / CLOCKS_PER_SEC << "\n\n";
-							getch();
 							iteration++;
 						}
 					}
