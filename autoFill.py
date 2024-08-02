@@ -72,38 +72,64 @@ def process_file(ws, file_name, column):
     except Exception as e:
         print(f"An error occurred while processing {file_name}: {e}")
 
+def save_workbook(wb, workbook_filename, index):
+    wb.save(f"{workbook_filename}_{index}.xlsx")
+
 def main(workbook_filename, sheet_info):
-    # Create a new Excel workbook
+    # Initialize variables
+    wb_count = 1
     wb = openpyxl.Workbook()
+    ws_count = 0
     total_files_processed = 0
 
     for sheet_name, text_file_prefix, num_files in sheet_info:
+        # Create a new workbook if needed
+        if ws_count >= 40:
+            save_workbook(wb, workbook_filename, wb_count)
+            wb_count += 1
+            wb = openpyxl.Workbook()
+            ws_count = 0
+
         ws = initialize_worksheet(wb, sheet_name)
+        ws_count += 1
         print(f"Starting to process files for {sheet_name}")
+
         for i in range(1, num_files + 1):
             file_number = total_files_processed + i
             file_name = f"{text_file_prefix}{file_number}.txt"
             column = 3 + ((i - 1) % 10)
             print(f"Processing {file_name} into column {column} of {sheet_name}")
             process_file(ws, file_name, column)
+
         total_files_processed += num_files
 
-    # Save the workbook
-    wb.save(workbook_filename)
-
-workbook_filename = "GA_Results.xlsx"
-sheet_info = [
-    ("GA01", "GAResult", 10),
-    ("GA02", "GAResult", 10),
-    ("GA03", "GAResult", 10),
-    ("GA04", "GAResult", 10),
-    ("GA05", "GAResult", 10),
-    ("GA06", "GAResult", 10),
-    ("GA07", "GAResult", 10),
-    ("GA08", "GAResult", 10),
-    ("GA09", "GAResult", 10),
-    ("GA10", "GAResult", 10),
-]
+    # Save the last workbook
+    if ws_count > 0:
+        save_workbook(wb, workbook_filename, wb_count)
 
 if __name__ == "__main__":
-    main(workbook_filename, sheet_info)
+    sheet_info = [
+        ('GA001', 'GAResult', 10),
+        ('GA002', 'GAResult', 10),
+        ('GA003', 'GAResult', 10),
+        ('GA004', 'GAResult', 10),
+        ('GA005', 'GAResult', 10),
+        ('GA006', 'GAResult', 10),
+        ('GA007', 'GAResult', 10),
+        ('GA008', 'GAResult', 10),
+        ('GA009', 'GAResult', 10),
+        ('GA010', 'GAResult', 10),
+        ('GA011', 'GAResult', 10),
+        ('GA012', 'GAResult', 10),
+        ('GA013', 'GAResult', 10),
+        ('GA014', 'GAResult', 10),
+        ('GA015', 'GAResult', 10),
+        ('GA016', 'GAResult', 10),
+    ]
+    temp_list = []
+
+    for prefix, result, count in sheet_info:
+        for i in range(1, 11):
+            temp_list.append((f"{prefix}_{i}", result, count))
+
+    main("GA_Results", temp_list)
