@@ -82,7 +82,7 @@ double Fitness(double a[], int b)
 		{
 			sumFit += (a[j] * a[j] - 10 * cos(2 * M_PI * a[j]));
 		}
-		sumFit += 10*dimension + sumFit;
+    	sumFit += 10 * dimension; // This is to ensure it matches the standard Rastrigin function formula
 	}
 		
 		break;
@@ -220,8 +220,8 @@ void SelectionOperationTechnique(int i)
 		}
 
 		// Select parent1
-		double randValue = (double)rand();      // Store the result of rand() in a variable
-    	double randMax = (double)RAND_MAX;      // Store RAND_MAX in a variable
+		double randValue = rand();      // Store the result of rand() in a variable
+    	double randMax = RAND_MAX;      // Store RAND_MAX in a variable
 		double random1 = (randValue / randMax) * totalFitness;
 		double partialSum = 0;
 		for (parent1 = 0; parent1 < pSize; parent1++)
@@ -235,8 +235,8 @@ void SelectionOperationTechnique(int i)
 		double random2;
 		do
 		{
-			double randValue = (double)rand();      // Store the result of rand() in a variable
-    		double randMax = (double)RAND_MAX;      // Store RAND_MAX in a variable
+			double randValue = rand();      // Store the result of rand() in a variable
+    		double randMax = RAND_MAX;      // Store RAND_MAX in a variable
 			random2 = (randValue / randMax) * totalFitness;
 			partialSum = 0;
 			for (parent2 = 0; parent2 < pSize; parent2++)
@@ -460,7 +460,7 @@ int main()
 				for (int h = 0; h < 2; h++)
 				{ // Replacement operation technique(l)
 
-					for (int b = 2; b < 10; b++)
+					for (int b = 0; b < 10; b++)
 					{ // Benchmark function
 
 						for (int n = 0; n < 10; n++)
@@ -501,42 +501,20 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Selection operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-								cout<<"selection run"<<endl;
-
+		
 								SelectionOperationTechnique(e);
 								
-								cout<<endl;
-								for(int i =0;i<4;i++){
-									for(int j=0;j<dimension;j++){
-										cout<<"\t"<<paroff[i][j];
-									}
-								}
-								cout<<endl;
+								
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Crossover operation technique function calling
-								//--------------------------------------------------------------------------------------------------------------------------
-								cout<<"crossover run"<<endl;
-								
+								//--------------------------------------------------------------------------------------------------------------------------								
 								CrossoverOperationTechnique(f);	
-								cout<<endl;
-								for(int i =0;i<4;i++){
-									for(int j=0;j<dimension;j++){
-										cout<<"\t"<<paroff[i][j];
-									}
-								}
-								cout<<endl;
+								
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Mutation operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------								
-								cout<<"mutation run"<<endl;
 								MutationOperationTechnique(g, b);
-								cout<<endl;
-								for(int i =0;i<4;i++){
-									for(int j=0;j<dimension;j++){
-										cout<<"\t"<<paroff[i][j];
-									}
-								}
-								cout<<endl;
+								
 								//------------------------------------------------------------------------------------------------------------------------
 								// Fitness Evaluation
 								//------------------------------------------------------------------------------------------------------------------------
@@ -553,17 +531,7 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Replacement operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------								
-								cout<<"replacement run"<<endl;
 								ReplacementOperationTechnique(h);
-
-								cout<<endl;
-								for(int i =0;i<4;i++){
-									for(int j=0;j<dimension;j++){
-										cout<<"\t"<<paroff[i][j];
-									}
-								}
-								cout<<endl;
-
 								lFv = pow(999, 30);
 								for (int j = 0; j < pSize; j++)
 								{
