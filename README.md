@@ -32,10 +32,10 @@ python -m venv venv
 venv/Script/activate
 ```
 
-'''bash
+```bash
 pip install -r requirement.txt
-'''
+```
 
-'''bash
+```bash
 python autoFill.py
-'''
+```
