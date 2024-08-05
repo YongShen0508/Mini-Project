@@ -23,3 +23,15 @@
 
 
 HOW TO RUN PYTHON AUTOFILL FILE
+
+'''
+python -m venv venv
+'''
+
+'''
+venv/Script/activate
+'''
+
+'''
+pip install -r requirement.txt
+'''
