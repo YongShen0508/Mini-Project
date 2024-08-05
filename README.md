@@ -24,13 +24,13 @@
 
 HOW TO RUN PYTHON AUTOFILL FILE
 
-'''bash
+```bash
 python -m venv venv
-'''
+```
 
-'''bash
+```bash
 venv/Script/activate
-'''
+```
 
 '''bash
 pip install -r requirement.txt
