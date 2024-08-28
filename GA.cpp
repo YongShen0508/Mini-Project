@@ -296,6 +296,153 @@ void SelectionOperationTechnique(int i)
 	}
 	break;
 
+	case(2): // Rank Selection
+	{
+		// Create a sorted list of indices based on fitness values (ascending order)
+	        int indices[pSize];
+	        for (int j = 0; j < pSize; j++)
+	        {
+	            indices[j] = j;
+	        }
+	
+	        // Sort indices based on fitness values (using a simple bubble sort for clarity)
+	        for (int j = 0; j < pSize - 1; j++)
+	        {
+	            for (int k = 0; k < pSize - j - 1; k++)
+	            {
+	                if (fit[indices[k]] > fit[indices[k + 1]])
+	                {
+	                    std::swap(indices[k], indices[k + 1]);
+	                }
+	            }
+	        }
+	
+	        // Calculate rank-based probabilities
+	        double rankProbabilities[pSize];
+	        double totalRank = 0;
+	        for (int j = 0; j < pSize; j++)
+	        {
+	            rankProbabilities[j] = j + 1; // Rank (1 to pSize)
+	            totalRank += rankProbabilities[j];
+	        }
+	
+	        // Normalize the rank-based probabilities
+	        for (int j = 0; j < pSize; j++)
+	        {
+	            rankProbabilities[j] /= totalRank;
+	        }
+	
+	        // Select parent1 based on rank-based probabilities
+	        double random1 = ((double)rand() / RAND_MAX);
+	        double cumulativeProbability = 0;
+	        for (parent1 = 0; parent1 < pSize; parent1++)
+	        {
+	            cumulativeProbability += rankProbabilities[parent1];
+	            if (cumulativeProbability >= random1)
+	                break;
+	        }
+	        parent1 = indices[parent1];
+	
+	        // Select parent2 based on rank-based probabilities
+	        double random2;
+	        do
+	        {
+	            random2 = ((double)rand() / RAND_MAX);
+	            cumulativeProbability = 0;
+	            for (parent2 = 0; parent2 < pSize; parent2++)
+	            {
+	                cumulativeProbability += rankProbabilities[parent2];
+	                if (cumulativeProbability >= random2)
+	                    break;
+	            }
+	            parent2 = indices[parent2];
+	        } while (parent2 == parent1);
+	
+	        tfit[0] = fit[parent1];
+	        tfit[1] = fit[parent2];
+	        for (int j = 0; j < dimension; j++)
+	        {
+	            paroff[0][j] = chromosome[parent1][j];
+	            paroff[1][j] = chromosome[parent2][j];
+	        }
+	break;
+
+	case (1): // Rank-Roulette Selection
+	{
+	        // Create a sorted list of indices based on fitness values (ascending order)
+	        int indices[pSize];
+	        for (int j = 0; j < pSize; j++)
+	        {
+	            indices[j] = j;
+	        }
+	
+	        // Sort indices based on fitness values (using a simple bubble sort for clarity)
+	        for (int j = 0; j < pSize - 1; j++)
+	        {
+	            for (int k = 0; k < pSize - j - 1; k++)
+	            {
+	                if (fit[indices[k]] > fit[indices[k + 1]])
+	                {
+	                    std::swap(indices[k], indices[k + 1]);
+	                }
+	            }
+	        }
+	
+	        // Calculate rank-based probabilities (higher ranks should have lower probabilities)
+	        double rankProbabilities[pSize];
+	        double totalRank = 0;
+	        for (int j = 0; j < pSize; j++)
+	        {
+	            rankProbabilities[j] = (pSize - j); // Rank (pSize to 1)
+	            totalRank += rankProbabilities[j];
+	        }
+	
+	        // Normalize the rank-based probabilities
+	        for (int j = 0; j < pSize; j++)
+	        {
+	            rankProbabilities[j] /= totalRank;
+	        }
+	
+	        // Rank-Roulette Selection for parent1
+	        double randValue = rand();      // Store the result of rand() in a variable
+	        double randMax = RAND_MAX;      // Store RAND_MAX in a variable
+	        double random1 = randValue / randMax;
+	        double cumulativeProbability = 0;
+	        for (parent1 = 0; parent1 < pSize; parent1++)
+	        {
+	            cumulativeProbability += rankProbabilities[parent1];
+	            if (cumulativeProbability >= random1)
+	                break;
+	        }
+	        parent1 = indices[parent1];
+	
+	        // Rank-Roulette Selection for parent2
+	        double random2;
+	        do
+	        {
+	            randValue = rand();      // Store the result of rand() in a variable
+	            random2 = randValue / randMax;
+	            cumulativeProbability = 0;
+	            for (parent2 = 0; parent2 < pSize; parent2++)
+	            {
+	                cumulativeProbability += rankProbabilities[parent2];
+	                if (cumulativeProbability >= random2)
+	                    break;
+	            }
+	            parent2 = indices[parent2];
+	        } while (parent2 == parent1);
+	
+	        tfit[0] = fit[parent1];
+	        tfit[1] = fit[parent2];
+	        for (int j = 0; j < dimension; j++)
+	        {
+	            paroff[0][j] = chromosome[parent1][j];
+	            paroff[1][j] = chromosome[parent2][j];
+	        }
+	    }
+	break;
+
+	
 	default:
 		cout << "Selection errors" << endl;
 		break;
