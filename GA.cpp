@@ -480,7 +480,7 @@ void MutationOperationTechnique(int j, int b)
 				gmp = (rand() % 1000000) / 1000000;
 				if (gmp <= dmp)
 				{
-					// Uniform mutation: replace the gene with a random value within the allowed range
+					// Replace the gene with a random value within the allowed range
 					double minValue = rangeMin[b];
 					double maxValue = rangeMax[b];
 					double r = getrandom(-minValue, maxValue);
@@ -490,9 +490,64 @@ void MutationOperationTechnique(int j, int b)
 			}
 		}
 	}
-
 	break;
+		
+    	case (2): // Reversing Mutation
+    	{
+		for (int i = 2; i < 4; i++)
+        	{
+        		gmp = (rand() % 1000000) / 1000000;
+	            	if (gmp <= dmp)
+			{        	
+            			int position1 = getrandom(0, dimension - 1);
+            			int position2 = getrandom(0, dimension - 1);
 
+            			if (position1 > position2)
+            			{
+                			swap(position1, position2);
+           	 		}
+	
+            			while (position1 < position2)
+            			{
+                			swap(paroff[i][position1], paroff[i][position2]);
+                			position1++;
+                			position2--;
+            			}
+			}
+        	}
+    	}
+    	break;
+	case (3): // Flip-Reverse Mutation
+	{
+		for (int i = 2; i < 4; i++)
+        	{
+            		for (int k = 0; k < dimension; k++)
+            		{
+                		gmp = (rand() % 1000000) / 1000000;
+                		if (gmp <= dmp)
+                		{
+		                	paroff[i][k] = -paroff[i][k];
+                    
+                			int position1 = getrandom(0, dimension - 1);
+            				int position2 = getrandom(0, dimension - 1);
+
+            				if (position1 > position2)
+            				{
+                				swap(position1, position2);
+           	 			}
+	
+            				while (position1 < position2)
+            				{
+                				swap(paroff[i][position1], paroff[i][position2]);
+                				position1++;
+                				position2--;
+                			}  
+            			}
+        		}		
+		} 
+	}
+    	break;
+		
 	default:
 		cout << "Mutation errors" << endl;
 		break;
