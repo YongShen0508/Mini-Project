@@ -46,6 +46,35 @@ int iteration = 1;
 //------------------------------------------------------------------------------------------------------------------------------
 // Fitness Function
 //------------------------------------------------------------------------------------------------------------------------------
+
+void GeneratePopulation(int b)
+{ // get benchmark value (every benchmark has diff. rangemin, rangemax and rangediv)
+	for (int i = 0; i < pSize; i++)
+	{
+		for (int j = 0; j < dimension; j++)
+		{
+			int min = rangeMin[b];
+			int max = rangeMax[b];
+			r = getrandom(-min, max);
+			r = r / rangeDiv[b];
+			chromosome[i][j] = r;
+		}
+		// cout<<"Chromosome "<<i+1<<endl;
+		// for (int j = 0; j < dimension; j++){
+		// cout << setprecision(6) << chromosome[i][j] << "\t";
+		//}
+		// cout << endl<< endl;
+	}
+}
+void FitnessValue(int b)
+{
+	for (int i = 0; i < pSize; i++)
+	{
+		fit[i] = Fitness(chromosome[i], b);
+		// cout << setprecision(6) << fit[i] << endl;
+		sumFit = 0;
+	}
+}
 double Fitness(double a[], int b)
 {
 	//---------------------------------------------------------------------------------------------------------------------------
@@ -61,8 +90,7 @@ double Fitness(double a[], int b)
 			sumFit = sumFit + fv;
 		}
 	}
-		
-		break;
+	break;
 	case (1): // benchmark function 2 (Ackley function)
 	{
 		double sum1 = 0.0;
@@ -76,18 +104,16 @@ double Fitness(double a[], int b)
 		double term2 = exp(sum2 / dimension);
 		sumFit = term1 - term2 + 20.0 + exp(1.0);
 	}
-		
-		break;
+	break;
 	case (2): // benchmark function 3 (Rastrigin function)
 	{
 		for (int j = 0; j < dimension; j++)
 		{
 			sumFit += (a[j] * a[j] - 10 * cos(2 * M_PI * a[j]));
 		}
-    	sumFit += 10 * dimension; // This is to ensure it matches the standard Rastrigin function formula
+		sumFit += 10 * dimension; // This is to ensure it matches the standard Rastrigin function formula
 	}
-		
-		break;
+	break;
 	case (3): // benchmark function 4 (Zakharov function)
 	{
 		double sum1 = 0.0;
@@ -102,8 +128,8 @@ double Fitness(double a[], int b)
 		sum3 = pow(sum2, 2) + pow(sum2, 4);
 		sumFit = sum1 + sum3;
 	}
-		
-		break;
+
+	break;
 	case (4): // benchmark function 5(Axis Parallel Hyper-Ellipsoid function)
 	{
 		for (int j = 0; j < dimension; j++)
@@ -112,8 +138,8 @@ double Fitness(double a[], int b)
 			sumFit = sumFit + fv;
 		}
 	}
-		
-		break;
+
+	break;
 	case (5): // benchmark function 6	(Griewank function)
 	{
 		double sum1 = 0.0;
@@ -125,10 +151,10 @@ double Fitness(double a[], int b)
 		}
 		sumFit = sum1 - product + 1.0;
 	}
-		
-		break;
 
-	case (6):// benchmark function 7 (Sum of Different Powers function)
+	break;
+
+	case (6): // benchmark function 7 (Sum of Different Powers function)
 	{
 		for (int j = 0; j < dimension; j++)
 		{
@@ -136,7 +162,7 @@ double Fitness(double a[], int b)
 			sumFit += fv;
 		}
 	}
-		break;
+	break;
 	case (7): // benchmark function 8 (Rotated Hyper-Ellipsoid function)
 	{
 		for (int i = 0; i < dimension; i++)
@@ -148,7 +174,7 @@ double Fitness(double a[], int b)
 			}
 		}
 	}
-		break;
+	break;
 	case (8): // benchmark function 9 (Schwefel 2.22 function)
 	{
 		double sum1 = 0.0;
@@ -160,11 +186,11 @@ double Fitness(double a[], int b)
 		}
 		sumFit = sum1 + product;
 	}
-		
-		break;
+
+	break;
 	case (9): // benchmark function 10 (Exponential Function)
 	{
-		double fx=0.0;
+		double fx = 0.0;
 		for (int j = 0; j < dimension; j++)
 		{
 			fv = pow(a[j], 2);
@@ -172,41 +198,13 @@ double Fitness(double a[], int b)
 		}
 		sumFit = -exp(-0.5 * sumFit);
 	}
-		break;
+
+	break;
 	default:
 		cout << "fitness errors" << endl;
 		break;
 	}
 	return sumFit;
-}
-
-void GeneratePopulation(int b)
-{ // get benchmark value (every benchmark has diff. rangemin, rangemax and rangediv)
-	for (int i = 0; i < pSize; i++)
-	{
-		for (int j = 0; j < dimension; j++)
-		{
-			int min = rangeMin[b];
-			int max = rangeMax[b];
-			r = getrandom(-min, max);
-			r = r / rangeDiv[b];
-			chromosome[i][j] = r;
-		}
-		 //cout<<"Chromosome "<<i+1<<endl;
-		 //for (int j = 0; j < dimension; j++){
-		 //cout << setprecision(6) << chromosome[i][j] << "\t";
-		//}
-		 //cout << endl<< endl;
-	}
-}
-void FitnessValue(int b)
-{
-	for (int i = 0; i < pSize; i++)
-	{
-		fit[i] = Fitness(chromosome[i], b);
-		// cout << setprecision(6) << fit[i] << endl;
-		sumFit = 0;
-	}
 }
 
 void SelectionOperationTechnique(int i)
@@ -222,8 +220,8 @@ void SelectionOperationTechnique(int i)
 		}
 
 		// Select parent1
-		double randValue = rand();      // Store the result of rand() in a variable
-    	double randMax = RAND_MAX;      // Store RAND_MAX in a variable
+		double randValue = rand(); // Store the result of rand() in a variable
+		double randMax = RAND_MAX; // Store RAND_MAX in a variable
 		double random1 = (randValue / randMax) * totalFitness;
 		double partialSum = 0;
 		for (parent1 = 0; parent1 < pSize; parent1++)
@@ -237,8 +235,8 @@ void SelectionOperationTechnique(int i)
 		double random2;
 		do
 		{
-			double randValue = rand();      // Store the result of rand() in a variable
-    		double randMax = RAND_MAX;      // Store RAND_MAX in a variable
+			double randValue = rand(); // Store the result of rand() in a variable
+			double randMax = RAND_MAX; // Store RAND_MAX in a variable
 			random2 = (randValue / randMax) * totalFitness;
 			partialSum = 0;
 			for (parent2 = 0; parent2 < pSize; parent2++)
@@ -298,159 +296,157 @@ void SelectionOperationTechnique(int i)
 	}
 	break;
 
-	case(2): // Rank Selection
+	case (2): // Rank Selection
 	{
 		// Create a sorted list of indices based on fitness values (ascending order)
-	        int indices[pSize];
-	        for (int j = 0; j < pSize; j++)
-	        {
-	            indices[j] = j;
-	        }
-	
-	        // Sort indices based on fitness values (using a simple bubble sort for clarity)
-	        for (int j = 0; j < pSize - 1; j++)
-	        {
-	            for (int k = 0; k < pSize - j - 1; k++)
-	            {
-	                if (fit[indices[k]] > fit[indices[k + 1]])
-	                {
-	                    std::swap(indices[k], indices[k + 1]);
-	                }
-	            }
-	        }
-	
-	        // Calculate rank-based probabilities
-	        double rankProbabilities[pSize];
-	        double totalRank = 0;
-	        for (int j = 0; j < pSize; j++)
-	        {
-	            rankProbabilities[j] = j + 1; // Rank (1 to pSize)
-	            totalRank += rankProbabilities[j];
-	        }
-	
-	        // Normalize the rank-based probabilities
-	        for (int j = 0; j < pSize; j++)
-	        {
-	            rankProbabilities[j] /= totalRank;
-	        }
-	
-	        // Select parent1 based on rank-based probabilities
-	        double random1 = ((double)rand() / RAND_MAX);
-	        double cumulativeProbability = 0;
-	        for (parent1 = 0; parent1 < pSize; parent1++)
-	        {
-	            cumulativeProbability += rankProbabilities[parent1];
-	            if (cumulativeProbability >= random1)
-	                break;
-	        }
-	        parent1 = indices[parent1];
-	
-	        // Select parent2 based on rank-based probabilities
-	        double random2;
-	        do
-	        {
-	            random2 = ((double)rand() / RAND_MAX);
-	            cumulativeProbability = 0;
-	            for (parent2 = 0; parent2 < pSize; parent2++)
-	            {
-	                cumulativeProbability += rankProbabilities[parent2];
-	                if (cumulativeProbability >= random2)
-	                    break;
-	            }
-	            parent2 = indices[parent2];
-	        } while (parent2 == parent1);
-	
-	        tfit[0] = fit[parent1];
-	        tfit[1] = fit[parent2];
-	        for (int j = 0; j < dimension; j++)
-	        {
-	            paroff[0][j] = chromosome[parent1][j];
-	            paroff[1][j] = chromosome[parent2][j];
-	        }
-	break;
+		int indices[pSize];
+		for (int j = 0; j < pSize; j++)
+		{
+			indices[j] = j;
+		}
 
-	case (1): // Rank-Roulette Selection
+		// Sort indices based on fitness values (using a simple bubble sort for clarity)
+		for (int j = 0; j < pSize - 1; j++)
+		{
+			for (int k = 0; k < pSize - j - 1; k++)
+			{
+				if (fit[indices[k]] > fit[indices[k + 1]])
+				{
+					std::swap(indices[k], indices[k + 1]);
+				}
+			}
+		}
+
+		// Calculate rank-based probabilities
+		double rankProbabilities[pSize];
+		double totalRank = 0;
+		for (int j = 0; j < pSize; j++)
+		{
+			rankProbabilities[j] = j + 1; // Rank (1 to pSize)
+			totalRank += rankProbabilities[j];
+		}
+
+		// Normalize the rank-based probabilities
+		for (int j = 0; j < pSize; j++)
+		{
+			rankProbabilities[j] /= totalRank;
+		}
+
+		// Select parent1 based on rank-based probabilities
+		double random1 = ((double)rand() / RAND_MAX);
+		double cumulativeProbability = 0;
+		for (parent1 = 0; parent1 < pSize; parent1++)
+		{
+			cumulativeProbability += rankProbabilities[parent1];
+			if (cumulativeProbability >= random1)
+				break;
+		}
+		parent1 = indices[parent1];
+
+		// Select parent2 based on rank-based probabilities
+		double random2;
+		do
+		{
+			random2 = ((double)rand() / RAND_MAX);
+			cumulativeProbability = 0;
+			for (parent2 = 0; parent2 < pSize; parent2++)
+			{
+				cumulativeProbability += rankProbabilities[parent2];
+				if (cumulativeProbability >= random2)
+					break;
+			}
+			parent2 = indices[parent2];
+		} while (parent2 == parent1);
+
+		tfit[0] = fit[parent1];
+		tfit[1] = fit[parent2];
+		for (int j = 0; j < dimension; j++)
+		{
+			paroff[0][j] = chromosome[parent1][j];
+			paroff[1][j] = chromosome[parent2][j];
+		}
+		break;
+
+	case (3): // Rank-Roulette Selection
 	{
-	        // Create a sorted list of indices based on fitness values (ascending order)
-	        int indices[pSize];
-	        for (int j = 0; j < pSize; j++)
-	        {
-	            indices[j] = j;
-	        }
-	
-	        // Sort indices based on fitness values (using a simple bubble sort for clarity)
-	        for (int j = 0; j < pSize - 1; j++)
-	        {
-	            for (int k = 0; k < pSize - j - 1; k++)
-	            {
-	                if (fit[indices[k]] > fit[indices[k + 1]])
-	                {
-	                    std::swap(indices[k], indices[k + 1]);
-	                }
-	            }
-	        }
-	
-	        // Calculate rank-based probabilities (higher ranks should have lower probabilities)
-	        double rankProbabilities[pSize];
-	        double totalRank = 0;
-	        for (int j = 0; j < pSize; j++)
-	        {
-	            rankProbabilities[j] = (pSize - j); // Rank (pSize to 1)
-	            totalRank += rankProbabilities[j];
-	        }
-	
-	        // Normalize the rank-based probabilities
-	        for (int j = 0; j < pSize; j++)
-	        {
-	            rankProbabilities[j] /= totalRank;
-	        }
-	
-	        // Rank-Roulette Selection for parent1
-	        double randValue = rand();      // Store the result of rand() in a variable
-	        double randMax = RAND_MAX;      // Store RAND_MAX in a variable
-	        double random1 = randValue / randMax;
-	        double cumulativeProbability = 0;
-	        for (parent1 = 0; parent1 < pSize; parent1++)
-	        {
-	            cumulativeProbability += rankProbabilities[parent1];
-	            if (cumulativeProbability >= random1)
-	                break;
-	        }
-	        parent1 = indices[parent1];
-	
-	        // Rank-Roulette Selection for parent2
-	        double random2;
-	        do
-	        {
-	            randValue = rand();      // Store the result of rand() in a variable
-	            random2 = randValue / randMax;
-	            cumulativeProbability = 0;
-	            for (parent2 = 0; parent2 < pSize; parent2++)
-	            {
-	                cumulativeProbability += rankProbabilities[parent2];
-	                if (cumulativeProbability >= random2)
-	                    break;
-	            }
-	            parent2 = indices[parent2];
-	        } while (parent2 == parent1);
-	
-	        tfit[0] = fit[parent1];
-	        tfit[1] = fit[parent2];
-	        for (int j = 0; j < dimension; j++)
-	        {
-	            paroff[0][j] = chromosome[parent1][j];
-	            paroff[1][j] = chromosome[parent2][j];
-	        }
-	    }
-	break;
+		// Create a sorted list of indices based on fitness values (ascending order)
+		int indices[pSize];
+		for (int j = 0; j < pSize; j++)
+		{
+			indices[j] = j;
+		}
 
-	
+		// Sort indices based on fitness values (using a simple bubble sort for clarity)
+		for (int j = 0; j < pSize - 1; j++)
+		{
+			for (int k = 0; k < pSize - j - 1; k++)
+			{
+				if (fit[indices[k]] > fit[indices[k + 1]])
+				{
+					std::swap(indices[k], indices[k + 1]);
+				}
+			}
+		}
+
+		// Calculate rank-based probabilities (higher ranks should have lower probabilities)
+		double rankProbabilities[pSize];
+		double totalRank = 0;
+		for (int j = 0; j < pSize; j++)
+		{
+			rankProbabilities[j] = (pSize - j); // Rank (pSize to 1)
+			totalRank += rankProbabilities[j];
+		}
+
+		// Normalize the rank-based probabilities
+		for (int j = 0; j < pSize; j++)
+		{
+			rankProbabilities[j] /= totalRank;
+		}
+
+		// Rank-Roulette Selection for parent1
+		double randValue = rand(); // Store the result of rand() in a variable
+		double randMax = RAND_MAX; // Store RAND_MAX in a variable
+		double random1 = randValue / randMax;
+		double cumulativeProbability = 0;
+		for (parent1 = 0; parent1 < pSize; parent1++)
+		{
+			cumulativeProbability += rankProbabilities[parent1];
+			if (cumulativeProbability >= random1)
+				break;
+		}
+		parent1 = indices[parent1];
+
+		// Rank-Roulette Selection for parent2
+		double random2;
+		do
+		{
+			randValue = rand(); // Store the result of rand() in a variable
+			random2 = randValue / randMax;
+			cumulativeProbability = 0;
+			for (parent2 = 0; parent2 < pSize; parent2++)
+			{
+				cumulativeProbability += rankProbabilities[parent2];
+				if (cumulativeProbability >= random2)
+					break;
+			}
+			parent2 = indices[parent2];
+		} while (parent2 == parent1);
+
+		tfit[0] = fit[parent1];
+		tfit[1] = fit[parent2];
+		for (int j = 0; j < dimension; j++)
+		{
+			paroff[0][j] = chromosome[parent1][j];
+			paroff[1][j] = chromosome[parent2][j];
+		}
+	}
+	break;
 	default:
 		cout << "Selection errors" << endl;
 		break;
 	}
+	}
 }
-
 void MutationOperationTechnique(int j, int b)
 {
 	switch (j)
@@ -493,63 +489,63 @@ void MutationOperationTechnique(int j, int b)
 		}
 	}
 	break;
-		
-    	case (2): // Reversing Mutation
-    	{
-		for (int i = 2; i < 4; i++)
-        	{
-        		gmp = (rand() % 1000000) / 1000000;
-	            	if (gmp <= dmp)
-			{        	
-            			int position1 = getrandom(0, dimension - 1);
-            			int position2 = getrandom(0, dimension - 1);
 
-            			if (position1 > position2)
-            			{
-                			swap(position1, position2);
-           	 		}
-	
-            			while (position1 < position2)
-            			{
-                			swap(paroff[i][position1], paroff[i][position2]);
-                			position1++;
-                			position2--;
-            			}
+	case (2): // Reversing Mutation
+	{
+		for (int i = 2; i < 4; i++)
+		{
+			gmp = (rand() % 1000000) / 1000000;
+			if (gmp <= dmp)
+			{
+				int position1 = getrandom(0, dimension - 1);
+				int position2 = getrandom(0, dimension - 1);
+
+				if (position1 > position2)
+				{
+					swap(position1, position2);
+				}
+
+				while (position1 < position2)
+				{
+					swap(paroff[i][position1], paroff[i][position2]);
+					position1++;
+					position2--;
+				}
 			}
-        	}
-    	}
-    	break;
+		}
+	}
+	break;
 	case (3): // Flip-Reverse Mutation
 	{
 		for (int i = 2; i < 4; i++)
-        	{
-            		for (int k = 0; k < dimension; k++)
-            		{
-                		gmp = (rand() % 1000000) / 1000000;
-                		if (gmp <= dmp)
-                		{
-		                	paroff[i][k] = -paroff[i][k];
-                    
-                			int position1 = getrandom(0, dimension - 1);
-            				int position2 = getrandom(0, dimension - 1);
+		{
+			for (int k = 0; k < dimension; k++)
+			{
+				gmp = (rand() % 1000000) / 1000000;
+				if (gmp <= dmp)
+				{
+					paroff[i][k] = -paroff[i][k];
 
-            				if (position1 > position2)
-            				{
-                				swap(position1, position2);
-           	 			}
-	
-            				while (position1 < position2)
-            				{
-                				swap(paroff[i][position1], paroff[i][position2]);
-                				position1++;
-                				position2--;
-                			}  
-            			}
-        		}		
-		} 
+					int position1 = getrandom(0, dimension - 1);
+					int position2 = getrandom(0, dimension - 1);
+
+					if (position1 > position2)
+					{
+						swap(position1, position2);
+					}
+
+					while (position1 < position2)
+					{
+						swap(paroff[i][position1], paroff[i][position2]);
+						position1++;
+						position2--;
+					}
+				}
+			}
+		}
 	}
-    	break;
-		
+	break;
+
 	default:
 		cout << "Mutation errors" << endl;
 		break;
@@ -560,7 +556,7 @@ void CrossoverOperationTechnique(int k)
 	switch (k)
 	{
 
-	case 0: // Uniform Crossover
+	case (0): // Uniform Crossover
 	{
 		for (int i = 0; i < dimension; ++i)
 		{
@@ -576,8 +572,8 @@ void CrossoverOperationTechnique(int k)
 			}
 		}
 	}
-		break;
-	case 1: // Two-Point Crossover
+	break;
+	case (1): // Two-Point Crossover
 	{
 		int point1 = getrandom(0, dimension - 1);
 		int point2 = getrandom(0, dimension - 1);
@@ -599,8 +595,8 @@ void CrossoverOperationTechnique(int k)
 			}
 		}
 	}
-		break;
-			case 2: // Shuffle Crossover
+	break;
+	case (2): // Shuffle Crossover
 	{
 		// Create a vector of indices
 		vector<int> indices(dimension);
@@ -629,9 +625,9 @@ void CrossoverOperationTechnique(int k)
 			}
 		}
 	}
-		break;
+	break;
 
-	case 3: // Mixed Uniform and Shuffle Crossover
+	case (3): // Mixed Uniform and Shuffle Crossover
 	{
 		// Step 1: Apply Uniform Crossover to the first half
 		for (int i = 0; i < dimension / 2; ++i)
@@ -646,71 +642,69 @@ void CrossoverOperationTechnique(int k)
 				paroff[2][i] = paroff[1][i];
 				paroff[3][i] = paroff[0][i];
 			}
-		vector<int> indices(dimension / 2);
-		for (int i = 0; i < dimension / 2; ++i)
-		{
-			indices[i] = i + dimension / 2;
-		}
-
-		random_device rd;
-		mt19937 g(rd());
-		shuffle(indices.begin(), indices.end(), g);
-
-		for (int i = 0; i < dimension / 2; ++i)
-		{
-			int idx = indices[i];
-			if (i < (dimension / 2) / 2)
+			vector<int> indices(dimension / 2);
+			for (int i = 0; i < dimension / 2; ++i)
 			{
-				paroff[2][idx] = paroff[0][idx];
-				paroff[3][idx] = paroff[1][idx];
+				indices[i] = i + dimension / 2;
 			}
-			else
+
+			random_device rd;
+			mt19937 g(rd());
+			shuffle(indices.begin(), indices.end(), g);
+
+			for (int i = 0; i < dimension / 2; ++i)
 			{
-				paroff[2][idx] = paroff[1][idx];
-				paroff[3][idx] = paroff[0][idx];
+				int idx = indices[i];
+				if (i < (dimension / 2) / 2)
+				{
+					paroff[2][idx] = paroff[0][idx];
+					paroff[3][idx] = paroff[1][idx];
+				}
+				else
+				{
+					paroff[2][idx] = paroff[1][idx];
+					paroff[3][idx] = paroff[0][idx];
+				}
 			}
 		}
-	}
 		break;
-		}
+	}
 	default:
 		cout << "Crossover operation technique error: invalid case" << endl;
 		break;
 	}
 }
-	default:
-		cout << "Crossover operation technique error: invalid case" << endl;
-		break;
-	}
-}
+
 void ReplacementOperationTechnique(int l)
 {
 	switch (l)
 	{
 	case (0): // weak parent replacement
 	{
-		for (int j = 2; j < 4; j++)
+		for (int i = 0; i < 4 - 1; i++)
 		{
-			if (tfit[0] > tfit[j])
+			for (int j = i; j < 4; j++)
 			{
-				for (int k = 0; k < dimension; k++)
+				if (tfit[i] > tfit[j])
 				{
-					chromosome[parent1][k] = paroff[j][k];
+					swap(tfit[i], tfit[j]);
+					swap(paroff[i], paroff[j]);
 				}
-				fit[parent1] = tfit[j];
-			}
-			if (tfit[1] > tfit[j])
-			{
-				for (int k = 0; k < dimension; k++)
-				{
-					chromosome[parent2][k] = paroff[j][k];
-				}
-				fit[parent2] = tfit[j];
 			}
 		}
-	}
+		for (int k = 0; k < dimension; k++)
+		{
+			chromosome[parent1][k] = paroff[0][k];
+		}
+		fit[parent1] = tfit[0];
 
-	break;
+		for (int k = 0; k < dimension; k++)
+		{
+			chromosome[parent2][k] = paroff[1][k];
+		}
+		fit[parent2] = tfit[1];
+		break;
+	}
 	case (1): // both parent replacement
 	{
 		for (int i = 0; i < dimension; i++)
@@ -721,7 +715,103 @@ void ReplacementOperationTechnique(int l)
 		fit[parent1] = tfit[2];
 		fit[parent2] = tfit[3];
 	}
+	case (2): // tournament replacement
+	{
+		for (int i = 2; i < 4; i++)
+		{
+			int posIndex[5]; // tournament size
+			int lowestIndex = 0;
+			bool isTrue = true;
+			for (int j = 0; j < 5; j++)
+			{
+				do
+				{
+					posIndex[j] = rand() % pSize;
+					for (int k = 0; k < j; k++)
+					{
+						if (posIndex[j] == posIndex[k])
+						{
+							isTrue = false;
+							break;
+						}
+					}
+				} while (!isTrue);
+			}
+			if (tfit[i] > fit[lowestIndex])
+			{
+				for (int z = 0; z < dimension; z++)
+				{
+					chromosome[lowestIndex][z] = paroff[i][z];
+				}
+				fit[lowestIndex] = tfit[i];
+			}
+		}
+	}
+	case (3): // Proposed replacement
+	{		  // find average of population
+		double totalFit = 0;
+		for (int i = 0; i < pSize; i++)
+		{
+			totalFit += fit[i];
+		}
+		double avgFit = totalFit / pSize;
+		cout << avgFit << endl
+			 << totalFit << endl;
+		int aboveAVG = 0;
+		int posIndex[40]; // store chromosome index above avg
+		for (int i = 0; i < pSize; i++)
+		{
+			if (fit[i] > avgFit)
+			{
+				posIndex[aboveAVG] = i;
+				aboveAVG++;
+			}
+		}
+		// pick two chromosome randomly which above avg
+		int targetPos[2];
+		targetPos[0] = posIndex[rand() % aboveAVG];
+		int secondIndex;
+		do
+		{
+			secondIndex = posIndex[rand() % aboveAVG];
+		} while (secondIndex == targetPos[0]);
+		targetPos[1] = secondIndex;
+		// weak parent replacement
+		int tempParent1 = targetPos[0];
+		int tempParent2 = targetPos[1];
+		int tempFit[4] = {fit[tempParent1], fit[tempParent2], tfit[2], tfit[3]};
+		double tempOff[4][4];
+		for (int i = 0; i < dimension; i++)
+		{
+			tempOff[0][i] = chromosome[tempParent1][i]; // Copy chromosome of tempParent1
+			tempOff[1][i] = chromosome[tempParent2][i]; // Copy chromosome of tempParent2
+			tempOff[2][i] = paroff[2][i];				// Copy offspring from paroff[2]
+			tempOff[3][i] = paroff[3][i];				// Copy offspring from paroff[3]
+		}
+		for (int i = 0; i < 4 - 1; i++)
+		{
+			for (int j = i + 1; j < 4; j++)
+			{
+				if (tempFit[i] > tempFit[j])
+				{
+					swap(tempFit[i], tempFit[j]);
+					swap(tempOff[i], tempOff[j]);
+				}
+			}
+		}
+		for (int k = 0; k < dimension; k++)
+		{
+			chromosome[tempParent1][k] = tempOff[0][k];
+		}
+		fit[tempParent1] = tempFit[0];
 
+		for (int k = 0; k < dimension; k++)
+		{
+			chromosome[tempParent2][k] = tempOff[1][k];
+		}
+		fit[tempParent2] = tempFit[1];
+		break;
+	}
 	break;
 	default:
 		cout << "Replacement errors" << endl;
@@ -733,13 +823,13 @@ int main()
 	clock_t start, end;
 	srand(time(0));
 	// Each operation technique will run ten benchmark (each benchmark 10 times)
-	for (int e = 0; e < 2; e++)
+	for (int e = 0; e < 4; e++)
 	{ // Selection operation technique (i)
-		for (int f = 0; f < 2; f++)
+		for (int f = 0; f < 4; f++)
 		{ // CrossOver operation technique(k)
-			for (int g = 0; g < 2; g++)
+			for (int g = 0; g < 4; g++)
 			{ // Mutation operation technique(j)
-				for (int h = 0; h < 2; h++)
+				for (int h = 0; h < 4; h++)
 				{ // Replacement operation technique(l)
 
 					for (int b = 0; b < 10; b++)
@@ -749,18 +839,18 @@ int main()
 						{																			   // 10 times
 							string outfile1 = ".\\GAFolder\\GAResult" + to_string(iteration) + ".txt"; // all results place in single folder
 							ofstream outfileo1(outfile1.c_str(), ios::trunc);
-							 //outfileo1 << "Selection OT " << (e + 1) << " \n\n";
-							 //outfileo1 << "Crossover OT " << (f + 1) << " \n\n";
-							 //outfileo1 << "Mutation OT " << (g + 1) << " \n\n";
-							 //outfileo1 << "Replacement OT " << (h + 1) << " \n\n";
-							 //outfileo1 << "Benchmark Funtion " << (b + 1) << " \n\n";
-							 //outfileo1 << "Times " << (n + 1) << " \n\n";
-							  cout << "Selection OT " << (e + 1) << " \n\n";
-							  cout << "Crossover OT " << (f + 1) << " \n\n";
-							  cout << "Mutation OT " << (g + 1) << " \n\n";
-							  cout << "Replacement OT " << (h + 1) << " \n\n";
-							  cout << "Benchmark Funtion " << (b + 1) << " \n\n";
-							  cout << "Times " << (n + 1) << " \n\n";
+							// outfileo1 << "Selection OT " << (e + 1) << " \n\n";
+							// outfileo1 << "Crossover OT " << (f + 1) << " \n\n";
+							// outfileo1 << "Mutation OT " << (g + 1) << " \n\n";
+							// outfileo1 << "Replacement OT " << (h + 1) << " \n\n";
+							// outfileo1 << "Benchmark Funtion " << (b + 1) << " \n\n";
+							// outfileo1 << "Times " << (n + 1) << " \n\n";
+							cout << "Selection OT " << (e + 1) << " \n\n";
+							cout << "Crossover OT " << (f + 1) << " \n\n";
+							cout << "Mutation OT " << (g + 1) << " \n\n";
+							cout << "Replacement OT " << (h + 1) << " \n\n";
+							cout << "Benchmark Funtion " << (b + 1) << " \n\n";
+							cout << "Times " << (n + 1) << " \n\n";
 
 							// CPU Time
 							start = clock();
@@ -783,20 +873,19 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Selection operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-		
+
 								SelectionOperationTechnique(e);
-								
-								
+
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Crossover operation technique function calling
-								//--------------------------------------------------------------------------------------------------------------------------								
-								CrossoverOperationTechnique(f);	
-								
+								//--------------------------------------------------------------------------------------------------------------------------
+								CrossoverOperationTechnique(f);
+
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Mutation operation technique function calling
-								//--------------------------------------------------------------------------------------------------------------------------								
+								//--------------------------------------------------------------------------------------------------------------------------
 								MutationOperationTechnique(g, b);
-								
+
 								//------------------------------------------------------------------------------------------------------------------------
 								// Fitness Evaluation
 								//------------------------------------------------------------------------------------------------------------------------
@@ -812,7 +901,7 @@ int main()
 
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Replacement operation technique function calling
-								//--------------------------------------------------------------------------------------------------------------------------								
+								//--------------------------------------------------------------------------------------------------------------------------
 								ReplacementOperationTechnique(h);
 								lFv = pow(999, 30);
 								for (int j = 0; j < pSize; j++)
@@ -827,8 +916,6 @@ int main()
 								fit1 = 0;
 								fit2 = 0;
 								outfileo1 << setprecision(6) << lFv << endl;
-								
-									
 							}
 							lFv = pow(999, 30);
 							for (int j = 0; j < pSize; j++)
@@ -849,18 +936,18 @@ int main()
 
 							for (int j = 0; j < dimension; j++)
 							{
-								//cout << setprecision(6) << chromosome[lFvIndex][j] << "\t";
+								// cout << setprecision(6) << chromosome[lFvIndex][j] << "\t";
 								outfileo1 << setprecision(6) << chromosome[lFvIndex][j] << "\n";
 							}
 
-							 //cout << endl;
+							// cout << endl;
 							outfileo1 << endl;
 							end = clock();
 							// cout << "Time required for execution: " << (double)(end - start) / CLOCKS_PER_SEC << " seconds." << "\n\n";
 							outfileo1 << (double)(end - start) / CLOCKS_PER_SEC << "\n\n";
 							iteration++;
-							
-							
+
+							// initialize the chromosome and parent offspring
 							for (int i = 0; i < pSize; i++)
 							{
 								for (int j = 0; j < dimension; j++)
@@ -868,8 +955,8 @@ int main()
 									chromosome[i][j] = 0.0f;
 								}
 							}
-
-							for(int i = 0; i<4;i++){
+							for (int i = 0; i < 4; i++)
+							{
 								for (int j = 0; j < dimension; j++)
 								{
 									paroff[i][j] = 0.0f;
@@ -881,4 +968,5 @@ int main()
 			}
 		}
 	}
+	return 0;
 }
