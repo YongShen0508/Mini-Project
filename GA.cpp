@@ -11,6 +11,8 @@
 #include <sstream>
 #include <cmath>
 #include <math.h>
+#include <algorithm> // Required for shuffle
+#include <random>
 #define getrandom(min, max) (static_cast<long long>(rand()) * (max - min + 1) / RAND_MAX) + min
 #define gen 2000	 // number of iterations (number of generations)
 #define pSize 40	 // number of chromosomes (population size)
@@ -598,6 +600,84 @@ void CrossoverOperationTechnique(int k)
 		}
 	}
 		break;
+			case 2: // Shuffle Crossover
+	{
+		// Create a vector of indices
+		vector<int> indices(dimension);
+		for (int i = 0; i < dimension; ++i)
+		{
+			indices[i] = i;
+		}
+
+		// Shuffle the indices
+		random_device rd;
+		mt19937 g(rd());
+		shuffle(indices.begin(), indices.end(), g);
+
+		// Perform crossover based on shuffled indices
+		for (int i = 0; i < dimension; ++i)
+		{
+			if (i < dimension / 2)
+			{
+				paroff[2][indices[i]] = paroff[0][indices[i]];
+				paroff[3][indices[i]] = paroff[1][indices[i]];
+			}
+			else
+			{
+				paroff[2][indices[i]] = paroff[1][indices[i]];
+				paroff[3][indices[i]] = paroff[0][indices[i]];
+			}
+		}
+	}
+		break;
+
+	case 3: // Mixed Uniform and Shuffle Crossover
+	{
+		// Step 1: Apply Uniform Crossover to the first half
+		for (int i = 0; i < dimension / 2; ++i)
+		{
+			if ((rand() % 2) == 0)
+			{
+				paroff[2][i] = paroff[0][i];
+				paroff[3][i] = paroff[1][i];
+			}
+			else
+			{
+				paroff[2][i] = paroff[1][i];
+				paroff[3][i] = paroff[0][i];
+			}
+		vector<int> indices(dimension / 2);
+		for (int i = 0; i < dimension / 2; ++i)
+		{
+			indices[i] = i + dimension / 2;
+		}
+
+		random_device rd;
+		mt19937 g(rd());
+		shuffle(indices.begin(), indices.end(), g);
+
+		for (int i = 0; i < dimension / 2; ++i)
+		{
+			int idx = indices[i];
+			if (i < (dimension / 2) / 2)
+			{
+				paroff[2][idx] = paroff[0][idx];
+				paroff[3][idx] = paroff[1][idx];
+			}
+			else
+			{
+				paroff[2][idx] = paroff[1][idx];
+				paroff[3][idx] = paroff[0][idx];
+			}
+		}
+	}
+		break;
+		}
+	default:
+		cout << "Crossover operation technique error: invalid case" << endl;
+		break;
+	}
+}
 	default:
 		cout << "Crossover operation technique error: invalid case" << endl;
 		break;
