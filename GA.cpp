@@ -720,30 +720,38 @@ void ReplacementOperationTechnique(int l)
 		for (int i = 2; i < 4; i++)
 		{
 			int posIndex[5]; // tournament size
-			int lowestIndex = 0;
+			int highestIndex = 0;
+			int lock = 0;
 			bool isTrue = true;
 			for (int j = 0; j < 5; j++)
 			{
 				do
 				{
+					isTrue = true;
 					posIndex[j] = rand() % pSize;
 					for (int k = 0; k < j; k++)
 					{
-						if (posIndex[j] == posIndex[k])
+						if (posIndex[j] == posIndex[k] || posIndex[j] == lock)
 						{
 							isTrue = false;
 							break;
 						}
 					}
 				} while (!isTrue);
+				if (fit[posIndex[j]] > fit[posIndex[highestIndex]])
+				{
+					highestIndex = posIndex[j];
+				}
+				isTrue = true;
 			}
-			if (tfit[i] > fit[lowestIndex])
+			if (tfit[i] < fit[highestIndex])
 			{
 				for (int z = 0; z < dimension; z++)
 				{
-					chromosome[lowestIndex][z] = paroff[i][z];
+					chromosome[highestIndex][z] = paroff[i][z];
 				}
-				fit[lowestIndex] = tfit[i];
+				fit[highestIndex] = tfit[i];
+				lock = highestIndex;
 			}
 		}
 	}
