@@ -46,35 +46,6 @@ int iteration = 1;
 //------------------------------------------------------------------------------------------------------------------------------
 // Fitness Function
 //------------------------------------------------------------------------------------------------------------------------------
-
-void GeneratePopulation(int b)
-{ // get benchmark value (every benchmark has diff. rangemin, rangemax and rangediv)
-	for (int i = 0; i < pSize; i++)
-	{
-		for (int j = 0; j < dimension; j++)
-		{
-			int min = rangeMin[b];
-			int max = rangeMax[b];
-			r = getrandom(-min, max);
-			r = r / rangeDiv[b];
-			chromosome[i][j] = r;
-		}
-		// cout<<"Chromosome "<<i+1<<endl;
-		// for (int j = 0; j < dimension; j++){
-		// cout << setprecision(6) << chromosome[i][j] << "\t";
-		//}
-		// cout << endl<< endl;
-	}
-}
-void FitnessValue(int b)
-{
-	for (int i = 0; i < pSize; i++)
-	{
-		fit[i] = Fitness(chromosome[i], b);
-		// cout << setprecision(6) << fit[i] << endl;
-		sumFit = 0;
-	}
-}
 double Fitness(double a[], int b)
 {
 	//---------------------------------------------------------------------------------------------------------------------------
@@ -207,6 +178,35 @@ double Fitness(double a[], int b)
 	return sumFit;
 }
 
+void GeneratePopulation(int b)
+{ // get benchmark value (every benchmark has diff. rangemin, rangemax and rangediv)
+	for (int i = 0; i < pSize; i++)
+	{
+		for (int j = 0; j < dimension; j++)
+		{
+			int min = rangeMin[b];
+			int max = rangeMax[b];
+			r = getrandom(-min, max);
+			r = r / rangeDiv[b];
+			chromosome[i][j] = r;
+		}
+		// cout<<"Chromosome "<<i+1<<endl;
+		// for (int j = 0; j < dimension; j++){
+		// cout << setprecision(6) << chromosome[i][j] << "\t";
+		//}
+		// cout << endl<< endl;
+	}
+}
+void FitnessValue(int b)
+{
+	for (int i = 0; i < pSize; i++)
+	{
+		fit[i] = Fitness(chromosome[i], b);
+		// cout << setprecision(6) << fit[i] << endl;
+		sumFit = 0;
+	}
+}
+
 void SelectionOperationTechnique(int i)
 {
 	switch (i)
@@ -218,7 +218,6 @@ void SelectionOperationTechnique(int i)
 		{
 			totalFitness += fit[j];
 		}
-
 		// Select parent1
 		double randValue = rand(); // Store the result of rand() in a variable
 		double randMax = RAND_MAX; // Store RAND_MAX in a variable
@@ -230,7 +229,6 @@ void SelectionOperationTechnique(int i)
 			if (partialSum >= random1)
 				break;
 		}
-
 		// Select parent2
 		double random2;
 		do
@@ -246,7 +244,6 @@ void SelectionOperationTechnique(int i)
 					break;
 			}
 		} while (parent2 == parent1);
-
 		tfit[0] = fit[parent1];
 		tfit[1] = fit[parent2];
 		for (int j = 0; j < dimension; j++)
@@ -365,7 +362,8 @@ void SelectionOperationTechnique(int i)
 			paroff[0][j] = chromosome[parent1][j];
 			paroff[1][j] = chromosome[parent2][j];
 		}
-		break;
+	}
+	break;
 
 	case (3): // Rank-Roulette Selection
 	{
@@ -445,28 +443,30 @@ void SelectionOperationTechnique(int i)
 		cout << "Selection errors" << endl;
 		break;
 	}
-	}
 }
+
 void MutationOperationTechnique(int j, int b)
 {
 	switch (j)
 	{
 	case (0): // Flipping Mutation
 	{
-		for (int i = 2; i < 4; i++)
+		gmp = (rand() % 1000000) / 1000000;
+		if (gmp < dmp)
 		{
-			for (int k = 0; k < dimension; k++)
+			for (int i = 2; i < 4; i++)
 			{
-				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
+				for (int k = 0; k < dimension; k++)
 				{
-					// Flip the gene (invert its sign)
-					paroff[i][k] = -paroff[i][k];
+					double minValue = rangeMin[b];
+					double maxValue = rangeMax[b];
+					double r = getrandom(-minValue, maxValue);
+					r = r / rangeDiv[b];
+					paroff[i][k] = r;
 				}
 			}
 		}
 	}
-
 	break;
 
 	case (1): // Uniform Mutation
@@ -476,9 +476,8 @@ void MutationOperationTechnique(int j, int b)
 			for (int k = 0; k < dimension; k++)
 			{
 				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
+				if (gmp < dmp)
 				{
-					// Replace the gene with a random value within the allowed range
 					double minValue = rangeMin[b];
 					double maxValue = rangeMax[b];
 					double r = getrandom(-minValue, maxValue);
@@ -492,10 +491,10 @@ void MutationOperationTechnique(int j, int b)
 
 	case (2): // Reversing Mutation
 	{
-		for (int i = 2; i < 4; i++)
+		gmp = (rand() % 1000000) / 1000000;
+		if (gmp < dmp)
 		{
-			gmp = (rand() % 1000000) / 1000000;
-			if (gmp <= dmp)
+			for (int i = 2; i < 4; i++)
 			{
 				int position1 = getrandom(0, dimension - 1);
 				int position2 = getrandom(0, dimension - 1);
@@ -517,29 +516,36 @@ void MutationOperationTechnique(int j, int b)
 	break;
 	case (3): // Flip-Reverse Mutation
 	{
-		for (int i = 2; i < 4; i++)
+		gmp = (rand() % 1000000) / 1000000;
+		if (gmp < dmp)
 		{
-			for (int k = 0; k < dimension; k++)
+			for (int i = 2; i < 4; i++) // Flipping part
 			{
-				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
+				for (int k = 0; k < dimension; k++)
 				{
-					paroff[i][k] = -paroff[i][k];
+					double minValue = rangeMin[b];
+					double maxValue = rangeMax[b];
+					double r = getrandom(-minValue, maxValue);
+					r = r / rangeDiv[b];
+					paroff[i][k] = r;
+				}
+			}
 
-					int position1 = getrandom(0, dimension - 1);
-					int position2 = getrandom(0, dimension - 1);
+			for (int i = 2; i < 4; i++) // Reversing part
+			{
+				int position1 = getrandom(0, dimension - 1);
+				int position2 = getrandom(0, dimension - 1);
 
-					if (position1 > position2)
-					{
-						swap(position1, position2);
-					}
+				if (position1 > position2)
+				{
+					swap(position1, position2);
+				}
 
-					while (position1 < position2)
-					{
-						swap(paroff[i][position1], paroff[i][position2]);
-						position1++;
-						position2--;
-					}
+				while (position1 < position2)
+				{
+					swap(paroff[i][position1], paroff[i][position2]);
+					position1++;
+					position2--;
 				}
 			}
 		}
@@ -703,8 +709,9 @@ void ReplacementOperationTechnique(int l)
 			chromosome[parent2][k] = paroff[1][k];
 		}
 		fit[parent2] = tfit[1];
-		break;
 	}
+	break;
+
 	case (1): // both parent replacement
 	{
 		for (int i = 0; i < dimension; i++)
@@ -715,14 +722,15 @@ void ReplacementOperationTechnique(int l)
 		fit[parent1] = tfit[2];
 		fit[parent2] = tfit[3];
 	}
+	break;
 	case (2): // tournament replacement
 	{
+		int lock = -1;
 		for (int i = 2; i < 4; i++)
 		{
-			int posIndex[5]; // tournament size
 			int highestIndex = 0;
-			int lock = 0;
-			bool isTrue = true;
+			int posIndex[5]; // tournament size
+			bool isTrue;
 			for (int j = 0; j < 5; j++)
 			{
 				do
@@ -738,12 +746,13 @@ void ReplacementOperationTechnique(int l)
 						}
 					}
 				} while (!isTrue);
-				if (fit[posIndex[j]] > fit[posIndex[highestIndex]])
+
+				if (fit[posIndex[j]] > fit[highestIndex])
 				{
 					highestIndex = posIndex[j];
 				}
-				isTrue = true;
 			}
+
 			if (tfit[i] < fit[highestIndex])
 			{
 				for (int z = 0; z < dimension; z++)
@@ -755,6 +764,7 @@ void ReplacementOperationTechnique(int l)
 			}
 		}
 	}
+	break;
 	case (3): // Proposed replacement
 	{		  // find average of population
 		double totalFit = 0;
@@ -762,9 +772,7 @@ void ReplacementOperationTechnique(int l)
 		{
 			totalFit += fit[i];
 		}
-		double avgFit = totalFit / pSize;
-		cout << avgFit << endl
-			 << totalFit << endl;
+		double avgFit = (double)totalFit / pSize;
 		int aboveAVG = 0;
 		int posIndex[40]; // store chromosome index above avg
 		for (int i = 0; i < pSize; i++)
@@ -775,6 +783,8 @@ void ReplacementOperationTechnique(int l)
 				aboveAVG++;
 			}
 		}
+		if (aboveAVG < 2)
+			return;
 		// pick two chromosome randomly which above avg
 		int targetPos[2];
 		targetPos[0] = posIndex[rand() % aboveAVG];
@@ -787,8 +797,8 @@ void ReplacementOperationTechnique(int l)
 		// weak parent replacement
 		int tempParent1 = targetPos[0];
 		int tempParent2 = targetPos[1];
-		int tempFit[4] = {fit[tempParent1], fit[tempParent2], tfit[2], tfit[3]};
-		double tempOff[4][4];
+		double tempFit[4] = {fit[tempParent1], fit[tempParent2], tfit[2], tfit[3]};
+		double tempOff[4][dimension];
 		for (int i = 0; i < dimension; i++)
 		{
 			tempOff[0][i] = chromosome[tempParent1][i]; // Copy chromosome of tempParent1
@@ -810,15 +820,10 @@ void ReplacementOperationTechnique(int l)
 		for (int k = 0; k < dimension; k++)
 		{
 			chromosome[tempParent1][k] = tempOff[0][k];
-		}
-		fit[tempParent1] = tempFit[0];
-
-		for (int k = 0; k < dimension; k++)
-		{
 			chromosome[tempParent2][k] = tempOff[1][k];
 		}
+		fit[tempParent1] = tempFit[0];
 		fit[tempParent2] = tempFit[1];
-		break;
 	}
 	break;
 	default:
@@ -881,18 +886,27 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Selection operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
-
+//								cout << "before selection" << endl;
+//								cout << "Selection OT " << (e + 1) << " \n\n";
 								SelectionOperationTechnique(e);
+//								cout << "after selection" << endl;
 
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Crossover operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
+//								cout << "before crossover" << endl;
+//								cout << "Crossover OT " << (f + 1) << " \n\n";
+
 								CrossoverOperationTechnique(f);
+//								cout << "after crossover" << endl;
 
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Mutation operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
+//								cout << "before mutation" << endl;
+//								cout << "Mutation OT " << (g + 1) << " \n\n";
 								MutationOperationTechnique(g, b);
+//								cout << "after mutation" << endl;
 
 								//------------------------------------------------------------------------------------------------------------------------
 								// Fitness Evaluation
@@ -910,7 +924,11 @@ int main()
 								//--------------------------------------------------------------------------------------------------------------------------
 								// Replacement operation technique function calling
 								//--------------------------------------------------------------------------------------------------------------------------
+//								cout << "before replacement" << endl;
+//								cout << "Replacement OT " << (h + 1) << " \n\n";
+
 								ReplacementOperationTechnique(h);
+//								cout << "after replacement" << endl;
 								lFv = pow(999, 30);
 								for (int j = 0; j < pSize; j++)
 								{
