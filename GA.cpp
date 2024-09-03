@@ -449,107 +449,115 @@ void SelectionOperationTechnique(int i)
 }
 void MutationOperationTechnique(int j, int b)
 {
-	switch (j)
-	{
-	case (0): // Flipping Mutation
-	{
-		for (int i = 2; i < 4; i++)
-		{
-			for (int k = 0; k < dimension; k++)
-			{
-				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
-				{
-					// Flip the gene (invert its sign)
-					paroff[i][k] = -paroff[i][k];
-				}
-			}
-		}
-	}
+    	switch (j)
+    	{
+    	case (0): // Flipping Mutation
+    	{
+    		gmp = (rand() % 1000000) / 1000000;
+    		if (gmp < dmp)
+    		{
+        		for (int i = 2; i < 4; i++)
+        		{
+            			for (int k = 0; k < dimension; k++)
+            			{
+            				double minValue = rangeMin[b];
+                    			double maxValue = rangeMax[b];
+                    			double r = getrandom(-minValue, maxValue);
+                   			r = r / rangeDiv[b];
+                    			paroff[i][k] = r;
+            			}
+        		}
+       		}	
+    	}
+    	break;
 
-	break;
+    	case (1): // Uniform Mutation
+    	{
+	    	for (int i = 2; i < 4; i++)
+        	{
+            		for (int k = 0; k < dimension; k++)
+            		{
+                		gmp = (rand() % 1000000) / 1000000;
+                		if (gmp < dmp)
+                		{
+                   			double minValue = rangeMin[b];
+                    			double maxValue = rangeMax[b];
+                    			double r = getrandom(-minValue, maxValue);
+                    			r = r / rangeDiv[b];
+                    			paroff[i][k] = r; 
+                		}
+            		}
+        	}
+   	}
+    	break;
 
-	case (1): // Uniform Mutation
-	{
-		for (int i = 2; i < 4; i++)
+    	case (2): // Reversing Mutation
+    	{
+        	gmp = (rand() % 1000000) / 1000000;
+        	if (gmp < dmp)
 		{
-			for (int k = 0; k < dimension; k++)
-			{
-				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
-				{
-					// Replace the gene with a random value within the allowed range
-					double minValue = rangeMin[b];
-					double maxValue = rangeMax[b];
-					double r = getrandom(-minValue, maxValue);
-					r = r / rangeDiv[b];
-					paroff[i][k] = r;
-				}
-			}
-		}
-	}
-	break;
-
-	case (2): // Reversing Mutation
-	{
-		for (int i = 2; i < 4; i++)
-		{
-			gmp = (rand() % 1000000) / 1000000;
-			if (gmp <= dmp)
+			for (int i = 2; i < 4; i++)
 			{
 				int position1 = getrandom(0, dimension - 1);
-				int position2 = getrandom(0, dimension - 1);
+            			int position2 = getrandom(0, dimension - 1);
 
-				if (position1 > position2)
-				{
-					swap(position1, position2);
-				}
-
-				while (position1 < position2)
-				{
-					swap(paroff[i][position1], paroff[i][position2]);
-					position1++;
-					position2--;
-				}
-			}
+            			if (position1 > position2)
+            			{
+                			swap(position1, position2);
+           	 		}
+	
+            			while (position1 < position2)
+            			{
+               				swap(paroff[i][position1], paroff[i][position2]);
+               				position1++;
+               				position2--;
+            			}				
+			}        	
 		}
-	}
-	break;
-	case (3): // Flip-Reverse Mutation
-	{
-		for (int i = 2; i < 4; i++)
-		{
-			for (int k = 0; k < dimension; k++)
+    	}
+    	break;
+    	case (3): // Flip-Reverse Mutation
+    	{	
+	    	gmp = (rand() % 1000000) / 1000000;
+    		if (gmp < dmp)
+    		{
+        		for (int i = 2; i < 4; i++) // Flipping part 
+        		{
+            			for (int k = 0; k < dimension; k++)    
+            			{
+	            			double minValue = rangeMin[b];
+                   	 		double maxValue = rangeMax[b];
+                    			double r = getrandom(-minValue, maxValue);
+                    			r = r / rangeDiv[b];
+                    			paroff[i][k] = r; 
+            			}
+        		}
+			
+			for (int i = 2; i < 4; i++) // Reversing part
 			{
-				gmp = (rand() % 1000000) / 1000000;
-				if (gmp <= dmp)
-				{
-					paroff[i][k] = -paroff[i][k];
+				int position1 = getrandom(0, dimension - 1);  
+            			int position2 = getrandom(0, dimension - 1);
 
-					int position1 = getrandom(0, dimension - 1);
-					int position2 = getrandom(0, dimension - 1);
-
-					if (position1 > position2)
-					{
-						swap(position1, position2);
-					}
-
-					while (position1 < position2)
-					{
-						swap(paroff[i][position1], paroff[i][position2]);
-						position1++;
-						position2--;
-					}
-				}
-			}
-		}
+            			if (position1 > position2)
+            			{
+                			swap(position1, position2);
+           	 		}
+	
+            			while (position1 < position2)
+            			{
+               				swap(paroff[i][position1], paroff[i][position2]);
+               				position1++;
+               				position2--;
+            			}				
+			} 	
+       		} 
 	}
-	break;
+    	break;
 
-	default:
-		cout << "Mutation errors" << endl;
-		break;
-	}
+   	default:
+        	cout << "Mutation errors" << endl;
+        	break;
+    	}
 }
 void CrossoverOperationTechnique(int k)
 {
