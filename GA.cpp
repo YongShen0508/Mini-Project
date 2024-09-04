@@ -458,9 +458,9 @@ void MutationOperationTechnique(int j, int b)
 			{
 				for (int k = 0; k < dimension; k++)
 				{
-					double minValue = rangeMin[b];
+					double minValue = rangeMin[b];   
 					double maxValue = rangeMax[b];
-					double r = getrandom(-minValue, maxValue);
+					double r = getrandom(-minValue, maxValue);  // Randomly get value from Upper and Lower Boundary
 					r = r / rangeDiv[b];
 					paroff[i][k] = r;
 				}
@@ -478,9 +478,9 @@ void MutationOperationTechnique(int j, int b)
 				gmp = (rand() % 1000000) / 1000000;
 				if (gmp < dmp)
 				{
-					double minValue = rangeMin[b];
+					double minValue = rangeMin[b]; // Similar to Flipping Mutation
 					double maxValue = rangeMax[b];
-					double r = getrandom(-minValue, maxValue);
+					double r = getrandom(-minValue, maxValue); // Randomly get value from Upper and Lower Boundary
 					r = r / rangeDiv[b];
 					paroff[i][k] = r;
 				}
@@ -494,22 +494,10 @@ void MutationOperationTechnique(int j, int b)
 		gmp = (rand() % 1000000) / 1000000;
 		if (gmp < dmp)
 		{
+			int randPosition = rand() % (dimension -1); // Ensure it is not the last position
 			for (int i = 2; i < 4; i++)
 			{
-				int position1 = getrandom(0, dimension - 1);
-				int position2 = getrandom(0, dimension - 1);
-
-				if (position1 > position2)
-				{
-					swap(position1, position2);
-				}
-
-				while (position1 < position2)
-				{
-					swap(paroff[i][position1], paroff[i][position2]);
-					position1++;
-					position2--;
-				}
+				swap(paroff[i][randPosition], paroff[i][randPosition + 1]);  // Swap the value at the chosen position with the next one
 			}
 		}
 	}
@@ -519,34 +507,24 @@ void MutationOperationTechnique(int j, int b)
 		gmp = (rand() % 1000000) / 1000000;
 		if (gmp < dmp)
 		{
-			for (int i = 2; i < 4; i++) // Flipping part
+			// Flipping Part
+			for (int i = 2; i < 4; i++) 
 			{
 				for (int k = 0; k < dimension; k++)
 				{
 					double minValue = rangeMin[b];
 					double maxValue = rangeMax[b];
-					double r = getrandom(-minValue, maxValue);
+					double r = getrandom(-minValue, maxValue); // Randomly get value from Upper and Lower Boundary
 					r = r / rangeDiv[b];
 					paroff[i][k] = r;
 				}
 			}
-
-			for (int i = 2; i < 4; i++) // Reversing part
+			
+			// Reversing Part
+			int randPosition = rand() % (dimension -1); // Ensure it is not the last position
+			for (int i = 2; i < 4; i++)
 			{
-				int position1 = getrandom(0, dimension - 1);
-				int position2 = getrandom(0, dimension - 1);
-
-				if (position1 > position2)
-				{
-					swap(position1, position2);
-				}
-
-				while (position1 < position2)
-				{
-					swap(paroff[i][position1], paroff[i][position2]);
-					position1++;
-					position2--;
-				}
+				swap(paroff[i][randPosition], paroff[i][randPosition + 1]);  // Swap the value at the chosen position with the next one
 			}
 		}
 	}
